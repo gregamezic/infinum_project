@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Shows-GregaMezic</string>
+
+
+    <!-- LOGIN ACTIVITY -->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="button_login_text">LOG IN</string>
 </resources>
