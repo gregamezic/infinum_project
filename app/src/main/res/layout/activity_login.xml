@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:indeterminateOnly="true"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"
-        android:backgroundTint="@color/pale_pink"
-        android:indeterminateTint="@color/pale_pink_active" />
-
+        android:visibility="invisible"
+        android:layout_marginTop="-7dp"
+        android:backgroundTint="@color/pale_pink_disabled"
+        android:indeterminateTint="@color/pale_pink_pressed" />
 
     <ImageView
         android:id="@+id/image_logo"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="72dp"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/pale_pink">
+            app:passwordToggleTint="@color/pale_pink_disabled">
 
             <EditText
                 android:id="@+id/input_password"

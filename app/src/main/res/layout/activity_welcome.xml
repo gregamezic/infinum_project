@@ -30,11 +30,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You're in!"
+            android:text="@string/welcome_message"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/text_black"
             android:textSize="28sp" />
     </LinearLayout>
+
 
 
     <TextView
@@ -45,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_main"
         android:textColor="@color/text_gray"
-        android:text="Welcome ..."
+        tools:text="Welcome ..."
         android:textSize="15sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

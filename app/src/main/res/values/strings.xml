@@ -6,4 +6,5 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="button_login_text">LOG IN</string>
+    <string name="welcome_message">You\'re in!</string>
 </resources>

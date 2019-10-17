@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        progressbar.visibility = View.INVISIBLE
+        btn_login.isEnabled = false
 
         // On button login click action
         btn_login.setOnClickListener {
@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
 
             progressbar.visibility = View.GONE
             finish()
-        }, 2000)
+        }, 2500)
     }
 
     private fun isLoginValid(): Boolean {
@@ -58,19 +58,22 @@ class LoginActivity : AppCompatActivity() {
     private fun validateUsername(): Boolean {
         val username = input_username.text.toString()
         if (username.trim().isEmpty()) {
-            input_username.error = "Username must contain at least one character!"
+            input_layout_username.error = "Username must contain at least one character!"
             return false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            input_username.error = "Enter correct email address!"
+            input_layout_username.error = "Enter correct email address!"
             return false
         }
+
+        input_layout_username.error = null
+        input_layout_password.error = null
         return true
     }
 
     private fun validatePassword(): Boolean {
         val password = input_password.text.toString()
         if (password.trim().length < 6) {
-            input_password.error = "Password must contain at least 6 character!"
+            input_layout_password.error = "Password must contain at least 6 character!"
             return false
         }
         return true
@@ -80,13 +83,8 @@ class LoginActivity : AppCompatActivity() {
 
     inner class mTextWatcher(view : TextView) : TextWatcher {
 
-        private val view = view
-
         override fun afterTextChanged(s: Editable?) {
-            if (view == input_username)
-                validateUsername()
-            else if (view == input_password)
-                validatePassword()
+            btn_login.isEnabled = isLoginValid()
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
