@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
         Handler().postDelayed(Runnable {
             val username = input_username.text.toString()
-            val intent : Intent = Intent(this, WelcomeActivity::class.java).apply {
+            val intent : Intent = Intent(this, ShowActivity::class.java).apply {
                 putExtra(USERNAME_KEY, username)
             }
             startActivity(intent)

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_padding">16dp</dimen>
-    <dimen name="input_size">16sp</dimen>
+    <dimen name="double_padding">32dp</dimen>
+    <dimen name="default_font">16sp</dimen>
+    <dimen name="shows_title_size">40sp</dimen>
+    <dimen name="shows_title_size_item">20sp</dimen>
 </resources>

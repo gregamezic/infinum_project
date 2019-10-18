@@ -10,6 +10,7 @@
     <color name="white">#FFFFFF</color>
     <color name="text_black">#2e2e2e</color>
     <color name="text_gray">#505050</color>
+    <color name="text_light_gray">#A0A0A0</color>
 
 
     <!-- Hint -->
