@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic
+package mezic.grega.hows_gregamezic.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,9 @@ import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.WelcomeActivity
+import mezic.grega.hows_gregamezic.shows.ShowActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,16 +35,16 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //set custom text change listeners
-        input_username.addTextChangedListener(mTextWatcher(input_username))
-        input_password.addTextChangedListener(mTextWatcher(input_password))
+        input_username.addTextChangedListener(mTextWatcher())
+        input_password.addTextChangedListener(mTextWatcher())
     }
 
     private fun login() {
         progressbar.visibility = View.VISIBLE
 
         Handler().postDelayed(Runnable {
-            val username = input_username.text.toString()
-            val intent : Intent = Intent(this, ShowActivity::class.java).apply {
+            val username: String = input_username.text.toString()
+            val intent : Intent = Intent(this, WelcomeActivity::class.java).apply {
                 putExtra(USERNAME_KEY, username)
             }
             startActivity(intent)
@@ -81,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    inner class mTextWatcher(view : TextView) : TextWatcher {
+    inner class mTextWatcher() : TextWatcher {
 
         override fun afterTextChanged(s: Editable?) {
             btn_login.isEnabled = isLoginValid()

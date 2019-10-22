@@ -10,4 +10,12 @@
 
     <!-- SHOWS ACTIVITY -->
     <string name="shows_title">Shows</string>
+    <string name="episodes">Episodes</string>
+    <string name="episodes_sleeping_text">Someone has fallen asleep.\nDon\'t wake him up.</string>
+    <string name="add_episodes">Add some episodes</string>
+
+    <!-- EPISODES -->
+    <string name="episode_name">Episode title</string>
+    <string name="episode_description">Episode description</string>
+    <string name="button_save_episode">SAVE</string>
 </resources>

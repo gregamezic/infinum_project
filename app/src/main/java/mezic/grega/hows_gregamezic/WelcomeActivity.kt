@@ -1,10 +1,12 @@
 package mezic.grega.hows_gregamezic
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
+import android.os.Handler
 import kotlinx.android.synthetic.main.activity_welcome.*
+import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.shows.ShowActivity
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -17,6 +19,12 @@ class WelcomeActivity : AppCompatActivity() {
         //read message
         val message = intent.getStringExtra(USERNAME_KEY)
         tv_welcome_name.text = "Welcome $message"
+
+
+        Handler().postDelayed(Runnable {
+            startActivity(Intent(this, ShowActivity::class.java))
+            finish()
+        }, 2000)
 
     }
 }

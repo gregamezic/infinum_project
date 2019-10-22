@@ -3,6 +3,8 @@
     <dimen name="default_padding">16dp</dimen>
     <dimen name="double_padding">32dp</dimen>
     <dimen name="default_font">16sp</dimen>
+    <dimen name="add_episodes_font">15sp</dimen>
     <dimen name="shows_title_size">40sp</dimen>
     <dimen name="shows_title_size_item">20sp</dimen>
+    <dimen name="toolbar_title">24sp</dimen>
 </resources>
