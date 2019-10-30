@@ -7,6 +7,8 @@
     <string name="hint_password">Password</string>
     <string name="button_login_text">LOG IN</string>
     <string name="welcome_message">You\'re in!</string>
+    <string name="dialog_exit_message">Are you sure you want to cancel? All of your data will not be saved</string>
+    <string name="dialog_exit_title">Cancel adding episode</string>
 
     <!-- SHOWS ACTIVITY -->
     <string name="shows_title">Shows</string>
@@ -18,4 +20,9 @@
     <string name="episode_name">Episode title</string>
     <string name="episode_description">Episode description</string>
     <string name="button_save_episode">SAVE</string>
+    <string name="remember_me">Remember me</string>
+    <string name="add_episode">Add episode</string>
+    <string name="upload_photo">Upload photo</string>
+    <string name="change_photo">Change photo</string>
+
 </resources>

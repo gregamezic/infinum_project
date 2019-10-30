@@ -28,10 +28,12 @@ class ShowsAdapter(private val dataset: List<Show>, val action: (Show) -> Unit) 
     inner class ShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(item: Show) {
-            itemView.image_show_item.setImageResource(item.id)
-            itemView.tv_shows_title_item.text = item.name
-            itemView.tv_shows_date_item.text = item.year
-            itemView.setOnClickListener {action(item)}
+            with(itemView) {
+                image_show_item.setImageResource(item.id)
+                tv_shows_title_item.text = item.name
+                tv_shows_date_item.text = item.year
+                setOnClickListener {action(item)}
+            }
         }
     }
 }

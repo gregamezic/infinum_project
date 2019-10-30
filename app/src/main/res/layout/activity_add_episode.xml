@@ -4,8 +4,71 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <include layout="@layout/view_toolbar" />
+
+
+    <LinearLayout
+        android:id="@+id/linear_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/img_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingTop="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_photo"
+            android:textSize="@dimen/add_episodes_font"
+            android:textColor="@color/pink_episodes"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linear_episode_image_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/img_episode_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingTop="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_photo"
+            android:textSize="@dimen/add_episodes_font"
+            android:textColor="@color/pink_episodes"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_episode_name"
@@ -13,7 +76,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/default_padding"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
-        android:layout_marginBottom="40dp">
+        app:layout_constraintBottom_toBottomOf="@id/btn_save_episode">
 
         <EditText
             android:id="@+id/input_episode_name"

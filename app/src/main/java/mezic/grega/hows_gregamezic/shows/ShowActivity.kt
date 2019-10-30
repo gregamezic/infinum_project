@@ -2,15 +2,20 @@ package mezic.grega.hows_gregamezic.shows
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_shows.*
+import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.Util
+import mezic.grega.hows_gregamezic.login.LoginActivity
+import mezic.grega.hows_gregamezic.utils.Util
 import mezic.grega.hows_gregamezic.shows.dummy.Show
 import mezic.grega.hows_gregamezic.shows.dummy.ShowsAdapter
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.appcompat.v7.Appcompat
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.yesButton
 
-class ShowActivity : AppCompatActivity() {
+class ShowActivity : MainBaseActivity() {
 
     companion object {
         val shows = mutableListOf(
@@ -51,14 +56,32 @@ class ShowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shows)
 
+
+        img_logout.setOnClickListener {
+            alert(Appcompat, "Are you sure you want to logout?", "Logout") {
+                yesButton {
+                    logout()
+                }
+                noButton { dialog ->
+                    dialog.dismiss()
+                }
+            }.show()
+        }
+
         showsRecycleView.layoutManager = LinearLayoutManager(this)
         showsRecycleView.adapter = ShowsAdapter(shows) {
-            val intent = Intent(this, ShowDetailActivity::class.java)
-            intent.putExtra(Util().SHOW_NAME_KEY, it.name)
-            intent.putExtra(Util().SHOW_DESCRIPTION_KEY, it.description)
-            intent.putExtra(Util().SHOW_YEAR_KEY, it.year)
+            val intent = Intent(this, ShowDetailActivity::class.java).apply {
+                putExtra(Util.SHOW_NAME_KEY, it.name)
+                putExtra(Util.SHOW_DESCRIPTION_KEY, it.description)
+                putExtra(Util.SHOW_YEAR_KEY, it.year)
+            }
             startActivity(intent)
         }
     }
 
+    private fun logout() {
+        mSharedPreferencesManager.setUserLogin(false)
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
 }

@@ -6,21 +6,22 @@ import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.view_toolbar.*
+import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 
 open class MainBaseActivity : AppCompatActivity() {
+
+    lateinit var mSharedPreferencesManager: SharedPreferencesManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSharedPreferencesManager = (application as ShowApp).mSharedPreferencesManager
     }
 
-    protected fun setupToolbar() {
-        // set toolbar
-        setSupportActionBar(my_toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
-
-    protected fun setToolbarName(name: String) {
-        title = name
+    protected fun setupToolbar(name: String) {
+        my_toolbar.title = name
+        my_toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     protected fun toast(message: String, long: Boolean = false) {

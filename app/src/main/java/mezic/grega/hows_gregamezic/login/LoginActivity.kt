@@ -8,19 +8,23 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.WelcomeActivity
 import mezic.grega.hows_gregamezic.shows.ShowActivity
+import mezic.grega.hows_gregamezic.utils.Util
 
-class LoginActivity : AppCompatActivity() {
-
-    val USERNAME_KEY : String = "USERNAME_KEY"
+class LoginActivity : MainBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // check if user is already logged in
+        if (mSharedPreferencesManager.isUserLogin()) {
+            startActivity(Intent(this, ShowActivity::class.java))
+            finish()
+        }
 
         btn_login.isEnabled = false
 
@@ -35,21 +39,26 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //set custom text change listeners
-        input_username.addTextChangedListener(mTextWatcher())
-        input_password.addTextChangedListener(mTextWatcher())
+        input_username.addTextChangedListener(LoginTextWatcher())
+        input_password.addTextChangedListener(LoginTextWatcher())
     }
 
     private fun login() {
         progressbar.visibility = View.VISIBLE
 
-        Handler().postDelayed(Runnable {
+        Handler().postDelayed({
             val username: String = input_username.text.toString()
             val intent : Intent = Intent(this, WelcomeActivity::class.java).apply {
-                putExtra(USERNAME_KEY, username)
+                putExtra(Util.USERNAME_KEY, username)
             }
-            startActivity(intent)
+
+            // save checked state to shared prefs
+            mSharedPreferencesManager.setUserLogin(cb_remember_login.isChecked)
 
             progressbar.visibility = View.GONE
+
+            // start the activity
+            startActivity(intent)
             finish()
         }, 2500)
     }
@@ -84,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    inner class mTextWatcher() : TextWatcher {
+    inner class LoginTextWatcher : TextWatcher {
 
         override fun afterTextChanged(s: Editable?) {
             btn_login.isEnabled = isLoginValid()
