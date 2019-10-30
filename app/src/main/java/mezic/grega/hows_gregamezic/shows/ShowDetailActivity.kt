@@ -28,7 +28,6 @@ class ShowDetailActivity : MainBaseActivity() {
 
         val name = intent.getStringExtra(Util.SHOW_NAME_KEY)
         val description = intent.getStringExtra(Util.SHOW_DESCRIPTION_KEY)
-        //val year = intent.getStringExtra(Util().SHOW_YEAR_KEY)
 
         // get id of the show
         showId = ShowActivity.shows.indexOfFirst { it.name == name }

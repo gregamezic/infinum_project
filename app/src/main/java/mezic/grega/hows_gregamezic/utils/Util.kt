@@ -4,6 +4,13 @@ class Util {
 
 
     companion object {
+        //REQUESTS
+        const val EPISODE_ADD_EPISODE_REQUEST_CODE = 1
+        const val PERMISSION_CAMERA_REQUEST_CODE = 2
+        const val PERMISSION_READ_EXTERNAL_REQUEST_CODE = 3
+        const val REQUEST_IMAGE_CAPTURE = 4
+        const val REQUEST_IMAGE_GALLERY = 5
+
         //SHARED PREFERENCES
         const val SHARED_PREFERENCES_NAME = "mezic.grega.shows.SHARED_PREFERENCES_NAME"
 
@@ -18,13 +25,8 @@ class Util {
         const val SHOW_POSITION = "mezic.grega.shows.SHOW_POSITION"
 
         // ADD EPISODE
-        const val EPISODE_ADD_EPISODE_REQUEST_CODE = 1
         const val EPISODE_ADD_EPISODE_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
         const val EPISODE_IMAGE_PATH_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
-        const val PERMISSION_CAMERA_REQUEST_CODE = 2
-        const val REQUEST_IMAGE_CAPTURE = 3
-        const val REQUEST_IMAGE_GALLERY = 4
-
         const val EPISODE_NAME = "mezic.grega.shows.EPISODE_NAME"
         const val EPISODE_DESCRIPTION = "mezic.grega.shows.EPISODE_DESCRIPTION"
     }

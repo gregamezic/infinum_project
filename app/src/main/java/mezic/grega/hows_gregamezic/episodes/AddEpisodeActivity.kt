@@ -13,6 +13,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,8 +21,10 @@ import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_add_episode.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.utils.PermissionHelper
 import mezic.grega.hows_gregamezic.utils.Util
 import mezic.grega.hows_gregamezic.utils.Util.Companion.PERMISSION_CAMERA_REQUEST_CODE
+import mezic.grega.hows_gregamezic.utils.Util.Companion.PERMISSION_READ_EXTERNAL_REQUEST_CODE
 import mezic.grega.hows_gregamezic.utils.Util.Companion.REQUEST_IMAGE_CAPTURE
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
@@ -37,6 +40,7 @@ import mezic.grega.hows_gregamezic.utils.Util.Companion.REQUEST_IMAGE_GALLERY
 
 class AddEpisodeActivity: MainBaseActivity() {
 
+    private val TAG : String = AddEpisodeActivity::class.java.name
     private var mCurrentPhotoPath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +50,13 @@ class AddEpisodeActivity: MainBaseActivity() {
         // set toolbar title
         setupToolbar(getString(R.string.add_episode))
 
+        // set view on click listeners
         setupViewsListeners()
     }
 
+    /**
+     * view on click listeners
+     */
     private fun setupViewsListeners() {
         // set text listeners for enabling button button
         btn_save_episode.isEnabled = false
@@ -74,6 +82,78 @@ class AddEpisodeActivity: MainBaseActivity() {
         }
     }
 
+
+    /**
+     * PERMISSION RESULTS
+     */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_CAMERA_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    takePicture()
+                } else {
+                    toast("Permission denied! Can not open camera!")
+                }
+            }
+
+            PERMISSION_READ_EXTERNAL_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    readPicture()
+                } else {
+                    toast("Permission denied! Can not open the gallery!")
+                }
+            }
+        }
+        return
+    }
+
+    /**
+     * ACTIVITY RESULTS
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // IMAGE FROM GALLERY
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == Activity.RESULT_OK) {
+                linear_camera.visibility = View.GONE
+                linear_episode_image_camera.visibility = View.VISIBLE
+
+                val bitmap: Bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath)
+                img_episode_camera.setImageBitmap(bitmap)
+
+                linear_episode_image_camera.setOnClickListener {
+                    openSelector()
+                }
+            } else {
+                loge(TAG, "Request image capture failed: $resultCode")
+            }
+        } else if (requestCode == REQUEST_IMAGE_GALLERY) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
+                linear_camera.visibility = View.GONE
+                linear_episode_image_camera.visibility = View.VISIBLE
+
+                try {
+                    val selectedImage: Uri? = data.data
+                    mCurrentPhotoPath = selectedImage?.path
+
+                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+                    img_episode_camera.setImageBitmap(bitmap)
+
+                    linear_episode_image_camera.setOnClickListener {
+                        openSelector()
+                    }
+
+                } catch (e: IOException) {
+                    loge(TAG, "request image from gallery failed: $resultCode.", e)
+                }
+            }
+        }
+    }
+
+
+
     private fun isValid(): Boolean {
         return input_episode_name.text.isNotEmpty() && input_episode_desciption.text.isNotEmpty()
     }
@@ -98,25 +178,11 @@ class AddEpisodeActivity: MainBaseActivity() {
 
     private fun openSelector() {
         val options = listOf("Camera", "Gallery")
+        val permissionHelper = PermissionHelper(this)
         selector("Select", options) { _, i ->
             when(i) {
-                0 -> if (checkPermission()) takePicture() else requestPermission()
-                1 -> if (checkPermission()) readPicture() else requestPermission()
-            }
-        }
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSION_CAMERA_REQUEST_CODE -> {
-
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    takePicture()
-                } else {
-                    toast("Permission denied!")
-                }
-                return
+                0 -> if (permissionHelper.checkCameraPermission()) takePicture() else permissionHelper.requestCameraPermission()
+                1 -> if (permissionHelper.checkReadExternalPermission()) readPicture() else permissionHelper.requestReadExternalPermission()
             }
         }
     }
@@ -140,41 +206,6 @@ class AddEpisodeActivity: MainBaseActivity() {
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-
-            linear_camera.visibility = View.GONE
-            linear_episode_image_camera.visibility = View.VISIBLE
-
-            val bitmap: Bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath)
-            img_episode_camera.setImageBitmap(bitmap)
-
-            linear_episode_image_camera.setOnClickListener {
-                openSelector()
-            }
-        } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-
-            linear_camera.visibility = View.GONE
-            linear_episode_image_camera.visibility = View.VISIBLE
-
-            try {
-                val selectedImage: Uri? = data.data
-                mCurrentPhotoPath = selectedImage?.path
-
-                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
-                img_episode_camera.setImageBitmap(bitmap)
-
-                linear_episode_image_camera.setOnClickListener {
-                    openSelector()
-                }
-
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     @Throws(IOException::class)
     private fun createFile(): File {
         // Create an image file name
@@ -190,18 +221,7 @@ class AddEpisodeActivity: MainBaseActivity() {
         }
     }
 
-    // TODO: check if read is needed
-    private fun checkPermission(): Boolean {
-        return (ContextCompat.checkSelfPermission(this, CAMERA) ==
-                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-            READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED)
-    }
 
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(READ_EXTERNAL_STORAGE, CAMERA),
-            PERMISSION_CAMERA_REQUEST_CODE)
-    }
 
 
     /**
