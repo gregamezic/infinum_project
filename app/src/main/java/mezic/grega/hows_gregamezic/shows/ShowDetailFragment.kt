@@ -1,7 +1,6 @@
 package mezic.grega.hows_gregamezic.shows
 
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_show_detail.*
 import kotlinx.android.synthetic.main.view_no_episodes.*
+import kotlinx.android.synthetic.main.view_toolbar.*
+import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.episodes.AddEpisodeActivity
-import mezic.grega.hows_gregamezic.episodes.dummy.Episode
 import mezic.grega.hows_gregamezic.episodes.dummy.EpisodeAdapter
-import mezic.grega.hows_gregamezic.utils.ToolbarHelper
+import mezic.grega.hows_gregamezic.shows.dummy.Show
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
@@ -24,7 +23,7 @@ class ShowDetailFragment: Fragment() {
 
     // Instance
     companion object {
-        fun newIntent(name: String, description: String, year: String?): ShowDetailFragment {
+        fun newIntent(name: String?, description: String?): ShowDetailFragment {
             val args = Bundle()
             args.putString(Util.SHOW_NAME_KEY, name)
             args.putString(Util.SHOW_DESCRIPTION_KEY, description)
@@ -41,9 +40,20 @@ class ShowDetailFragment: Fragment() {
         context?.toast(it.name)
     }
     private var showId: Int = -1
+    private var showName: String? = ""
+    private var showDescription: String? = ""
 
 
-    // functions
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ShowDetailCallback) {
+            showDetailCallback = context
+        } else {
+            throw RuntimeException("Please implement ShowCallback")
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,17 +65,20 @@ class ShowDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val name = arguments?.getString(Util.SHOW_NAME_KEY, "")
-        val description = arguments?.getString(Util.SHOW_DESCRIPTION_KEY, "")
+        showName = arguments?.getString(Util.SHOW_NAME_KEY, "")
+        showDescription = arguments?.getString(Util.SHOW_DESCRIPTION_KEY, "")
 
         // get id of the show
-        showId = ShowActivity.shows.indexOfFirst { it.name == name }
+        showId = ShowFragment.shows.indexOfFirst { it.name == showName }
 
         // add description text
-        show_detail_description.text = description
+        show_detail_description.text = showDescription
 
         // set toolbar title
-        context?.let { ToolbarHelper(it).setupToolbar(name) }
+        my_toolbar.title = showName
+        my_toolbar.setNavigationOnClickListener {
+            (context as MainFragmentActivity).supportFragmentManager.popBackStack()
+        }
 
         // add episode listeners
         setAddEpisodeListeners()
@@ -75,55 +88,17 @@ class ShowDetailFragment: Fragment() {
         (episodes_recycle_view as RecyclerView).adapter = adapter
 
         //set screen
-        if (ShowActivity.shows[showId].episodes.isEmpty())
+        if (ShowFragment.shows[showId].episodes.isEmpty())
             setEmptyScreen()
         else
             setEpisodesScreen()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Util.EPISODE_ADD_EPISODE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                val episodeName = data.getStringExtra(Util.EPISODE_NAME)
-                val episodeDescription = data.getStringExtra(Util.EPISODE_DESCRIPTION)
-                val imgPath = data.getStringExtra(Util.EPISODE_IMAGE_PATH_KEY)
-                val numberName = "${ShowActivity.shows[showId].episodes.size + 1}. $episodeName"
-
-                val episode = Episode(numberName, episodeDescription, imgPath)
-
-                ShowActivity.shows[showId].episodes.add(episode)
-
-                when {
-                    ShowActivity.shows[showId].episodes.isEmpty() -> setEmptyScreen()
-                    else -> updateEpisodeList(episode)
-                }
-
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                toast("Canceled adding episode")
-            }
-        }
-    }
-
-    private fun setAddEpisodeListeners() {
-        tv_add_episodes.setOnClickListener {
-            addEpisode()
-        }
-        fab_add_episode.setOnClickListener {
-            addEpisode()
-        }
-    }
-
-    private fun addEpisode() {
-        val intent = Intent(context, AddEpisodeActivity::class.java)
-        startActivityForResult(intent, Util.EPISODE_ADD_EPISODE_REQUEST_CODE)
     }
 
     private fun setEpisodesScreen() {
         linear_view_no_episodes.visibility = View.GONE
         episodes_recycle_view.visibility = View.VISIBLE
 
-        adapter = EpisodeAdapter(ShowActivity.shows[showId].episodes) {
+        adapter = EpisodeAdapter(ShowFragment.shows[showId].episodes) {
             toast(it.name)
         }
         (episodes_recycle_view as RecyclerView).adapter = adapter
@@ -135,23 +110,17 @@ class ShowDetailFragment: Fragment() {
         episodes_recycle_view.visibility = View.GONE
     }
 
-    private fun updateEpisodeList(episode: Episode) {
-        linear_view_no_episodes.visibility = View.GONE
-        episodes_recycle_view.visibility = View.VISIBLE
 
-        adapter.addEpisode(episode)
-    }
-
-    /*private fun setAddEpisodeListeners() {
+    private fun setAddEpisodeListeners() {
         tv_add_episodes.setOnClickListener {
-            showDetailCallback?.onAddEpisode(showId)
+            showDetailCallback?.onAddEpisode(showId, showName, showDescription)
         }
         fab_add_episode.setOnClickListener {
-            showDetailCallback?.onAddEpisode(showId)
+            showDetailCallback?.onAddEpisode(showId, showName, showDescription)
         }
-    }*/
+    }
 }
 
 interface ShowDetailCallback {
-    fun onAddEpisode(showId: Int)
+    fun onAddEpisode(showId: Int, showName: String?, showDescription: String?)
 }

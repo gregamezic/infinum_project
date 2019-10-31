@@ -1,18 +1,18 @@
 package mezic.grega.hows_gregamezic
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import mezic.grega.hows_gregamezic.episodes.AddEpisodeActivity
+import mezic.grega.hows_gregamezic.episodes.AddEpisodeCallback
+import mezic.grega.hows_gregamezic.episodes.AddEpisodeFragment
 import mezic.grega.hows_gregamezic.episodes.dummy.Episode
 import mezic.grega.hows_gregamezic.login.LoginActivity
 import mezic.grega.hows_gregamezic.shows.*
-import mezic.grega.hows_gregamezic.utils.Util
-import org.jetbrains.anko.toast
 
-class MainFragmentActivity : MainBaseActivity(), ShowCallback/*, ShowDetailCallback*/ {
+class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback {
 
     private var showId: Int = -1
+    private var showName: String? = ""
+    private var showDescription: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,42 +35,34 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback/*, ShowDetailCallb
 
     override fun onShowItemClick(name: String, description: String, year: String) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, ShowDetailFragment.newIntent(name, description, year))
+            .add(R.id.fragment_container, ShowDetailFragment.newIntent(name, description))
             .addToBackStack(ShowDetailFragment::class.java.name)
             .commit()
     }
 
-
-    /**
-     * Show detail fragment functions
-     */
-    /*override fun onAddEpisode(showId: Int) {
+    override fun onAddEpisode(showId: Int, showName: String?, showDescription: String?) {
         this.showId = showId
-        val intent = Intent(this, AddEpisodeActivity::class.java)
-        startActivityForResult(intent, Util.EPISODE_ADD_EPISODE_REQUEST_CODE)
-    }*/
+        this.showName = showName
+        this.showDescription = showDescription
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Util.EPISODE_ADD_EPISODE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                val episodeName = data.getStringExtra(Util.EPISODE_NAME)
-                val episodeDescription = data.getStringExtra(Util.EPISODE_DESCRIPTION)
-                val imgPath = data.getStringExtra(Util.EPISODE_IMAGE_PATH_KEY)
-                val numberName = "${ShowActivity.shows[showId].episodes.size + 1}. $episodeName"
+        //supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, AddEpisodeFragment.newIntent(showId))
+            .addToBackStack(AddEpisodeFragment::class.java.name)
+            .commit()
+    }
 
-                val episode = Episode(numberName, episodeDescription, imgPath)
+    override fun onEpisodeSave(name: String, description: String, imgPath: String?, showId: Int) {
 
-                ShowActivity.shows[showId].episodes.add(episode)
+        val numberName = "${ShowFragment.shows[showId].episodes.size + 1}. $name"
+        val episode = Episode(numberName, description, imgPath)
+        ShowFragment.shows[showId].episodes.add(episode)
 
-                when {
-                    ShowActivity.shows[showId].episodes.isEmpty() -> setEmptyScreen()
-                    else -> updateEpisodeList(episode)
-                }
-
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                toast("Canceled adding episode")
-            }
-        }
-    }*/
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, ShowDetailFragment.newIntent(showName, showDescription))
+            .addToBackStack(ShowDetailFragment::class.java.name)
+            .commit()
+    }
 }

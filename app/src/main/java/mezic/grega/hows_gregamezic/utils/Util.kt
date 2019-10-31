@@ -19,6 +19,7 @@ class Util {
 
         // SHOWS
         const val SHOW_NAME_KEY = "mezic.grega.shows.SHOW_NAME_KEY"
+        const val SHOW_ID_KEY = "mezic.grega.shows.SHOW_ID_KEY"
         const val SHOW_DESCRIPTION_KEY = "mezic.grega.shows.SHOW_DESCRIPTION_KEY"
         const val SHOW_YEAR_KEY = "mezic.grega.shows.SHOW_YEAR_KEY"
         const val SHOW_EPISODES_KEY = "mezic.grega.shows.SHOW_EPISODES_KEY"

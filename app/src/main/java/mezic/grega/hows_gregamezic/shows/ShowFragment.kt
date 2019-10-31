@@ -95,7 +95,7 @@ class ShowFragment : Fragment() {
         }
 
         showsRecycleView.layoutManager = LinearLayoutManager(context)
-        showsRecycleView.adapter = ShowsAdapter(ShowActivity.shows) {
+        showsRecycleView.adapter = ShowsAdapter(ShowFragment.shows) {
             showCallback?.onShowItemClick(it.name, it.description, it.year)
         }
     }

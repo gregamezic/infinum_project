@@ -1,11 +1,11 @@
 package mezic.grega.hows_gregamezic.utils
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import mezic.grega.hows_gregamezic.episodes.AddEpisodeActivity
 
 class PermissionHelper(private val context: Context) {
 
@@ -21,7 +21,7 @@ class PermissionHelper(private val context: Context) {
     // request
     fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
-            context as AddEpisodeActivity, arrayOf(Manifest.permission.CAMERA), Util.PERMISSION_CAMERA_REQUEST_CODE
+            context as Activity, arrayOf(Manifest.permission.CAMERA), Util.PERMISSION_CAMERA_REQUEST_CODE
         )
     }
 
@@ -38,7 +38,7 @@ class PermissionHelper(private val context: Context) {
     // request
     fun requestReadExternalPermission() {
         ActivityCompat.requestPermissions(
-            context as AddEpisodeActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Util.PERMISSION_READ_EXTERNAL_REQUEST_CODE
+            context as Activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Util.PERMISSION_READ_EXTERNAL_REQUEST_CODE
         )
     }
 

@@ -17,10 +17,12 @@
         android:theme="@style/AppTheme">
 
 
-        <activity
-            android:name=".login.WelcomeActivity" />
+        <activity android:name=".login.WelcomeActivity" />
 
         <activity android:name=".MainBaseActivity" />
+        <activity android:name=".MainFragmentActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="keyboard|orientation|screenSize"/>
 
         <activity
             android:name=".login.LoginActivity"
@@ -31,17 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".shows.ShowActivity" />
-
-        <activity
-            android:name=".shows.ShowDetailActivity" />
-
-        <activity
-            android:name=".episodes.AddEpisodeActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".MainFragmentActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

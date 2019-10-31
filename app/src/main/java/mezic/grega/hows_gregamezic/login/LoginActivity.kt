@@ -12,8 +12,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.shows.ShowActivity
-import mezic.grega.hows_gregamezic.shows.ShowFragment
 import mezic.grega.hows_gregamezic.utils.Util
 
 class LoginActivity : MainBaseActivity() {
