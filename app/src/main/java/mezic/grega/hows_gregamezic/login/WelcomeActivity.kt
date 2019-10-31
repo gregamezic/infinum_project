@@ -11,7 +11,7 @@ import mezic.grega.hows_gregamezic.utils.Util.Companion.USERNAME_KEY
 
 class WelcomeActivity : MainBaseActivity() {
 
-    private var mDelayHandler: Handler? = null
+    private var mDelayHandler: Handler = Handler()
     private val splashDelay: Long = 2000 //2 seconds
 
 
@@ -34,21 +34,14 @@ class WelcomeActivity : MainBaseActivity() {
     }
 
 
-
     override fun onStart() {
         super.onStart()
-
-        //Initialize the Handler
-        mDelayHandler = Handler()
-
         //Navigate with delay
-        mDelayHandler!!.postDelayed(mRunnable, splashDelay)
+        mDelayHandler.postDelayed(mRunnable, splashDelay)
     }
 
     public override fun onStop() {
-        if (mDelayHandler != null) {
-            mDelayHandler!!.removeCallbacks(mRunnable)
-        }
         super.onStop()
+        mDelayHandler.removeCallbacks(mRunnable)
     }
 }

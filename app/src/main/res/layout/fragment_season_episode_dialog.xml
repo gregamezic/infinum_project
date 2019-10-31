@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/double_padding"
+    android:paddingBottom="@dimen/double_padding"
+    android:paddingLeft="64dp"
+    android:paddingRight="64dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_season"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/season"
+        android:textColor="@color/pink_episodes"
+        android:textSize="@dimen/default_font"
+        android:layout_marginBottom="@dimen/double_padding"
+        app:layout_constraintLeft_toLeftOf="@+id/numberPicker_season"
+        app:layout_constraintRight_toRightOf="@+id/numberPicker_season"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/episode"
+        android:textSize="@dimen/default_font"
+        android:textColor="@color/pink_episodes"
+        android:layout_marginBottom="@dimen/double_padding"
+        app:layout_constraintLeft_toLeftOf="@+id/numberPicker_episode"
+        app:layout_constraintRight_toRightOf="@+id/numberPicker_episode"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker_season"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_season"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/double_padding"
+        app:layout_constraintLeft_toRightOf="@+id/numberPicker_season"
+        app:layout_constraintTop_toBottomOf="@+id/tv_episode" />
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/save"
+        android:textColor="@color/pink_episodes"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numberPicker_episode" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

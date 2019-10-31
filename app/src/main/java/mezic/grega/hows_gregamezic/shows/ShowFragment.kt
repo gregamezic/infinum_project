@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_shows.*
+import kotlinx.android.synthetic.main.fragment_shows.*
+import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.shows.dummy.Show
 import mezic.grega.hows_gregamezic.shows.dummy.ShowsAdapter
@@ -27,40 +28,6 @@ class ShowFragment : Fragment() {
         }
 
         var showCallback: ShowCallback? = null
-
-
-        val shows = mutableListOf(
-            Show(
-                R.drawable.icon_tbbt,
-                "The Big Bang Theory",
-                "(2007 - 2019)",
-                "A woman who moves into an apartment across the hall from two brilliant but socially awkward physicists shows them how little they know about life outside of the laboratory."
-            ),
-            Show(
-                R.drawable.icon_to,
-                "The Office",
-                "(2005 - 2013)",
-                "A mockumentary on a group of typical office workers, where the workday consists of ego clashes, inappropriate behavior, and tedium."
-            ),
-            Show(
-                R.drawable.icon_house,
-                "House M.D.",
-                "(2004 - 2012)",
-                "An antisocial maverick doctor who specializes in diagnostic medicine does whatever it takes to solve puzzling cases that come his way using his crack team of doctors and his wits."
-            ),
-            Show(
-                R.drawable.icon_jtv,
-                "Jane the Virgin",
-                "(2004 - )",
-                "A young, devout Catholic woman discovers that she was accidentally artificially inseminated."
-            ),
-            Show(
-                R.drawable.icon_sherlock,
-                "Sherlock",
-                "(2010 - )",
-                "A woman who moves into an apartment across the hall from two brilliant but socially awkward physicists shows them how little they know about life outside of the laboratory."
-            )
-        )
     }
 
     override fun onAttach(context: Context) {
@@ -95,7 +62,7 @@ class ShowFragment : Fragment() {
         }
 
         showsRecycleView.layoutManager = LinearLayoutManager(context)
-        showsRecycleView.adapter = ShowsAdapter(ShowFragment.shows) {
+        showsRecycleView.adapter = ShowsAdapter(MainFragmentActivity.shows) {
             showCallback?.onShowItemClick(it.name, it.description, it.year)
         }
     }

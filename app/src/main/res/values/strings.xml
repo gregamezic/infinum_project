@@ -24,5 +24,8 @@
     <string name="add_episode">Add episode</string>
     <string name="upload_photo">Upload photo</string>
     <string name="change_photo">Change photo</string>
+    <string name="season">Season</string>
+    <string name="save">SAVE</string>
+    <string name="episode">Episode</string>
 
 </resources>

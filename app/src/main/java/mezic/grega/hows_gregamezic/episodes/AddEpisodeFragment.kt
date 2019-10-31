@@ -18,7 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_add_episode.*
+import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
@@ -35,8 +35,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddEpisodeFragment: Fragment() {
-
+class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
     companion object {
         fun newIntent(showId : Int?) : AddEpisodeFragment {
             val args = Bundle()
@@ -52,12 +51,23 @@ class AddEpisodeFragment: Fragment() {
     private var mCurrentPhotoPath: String? = null
     private var showId: Int = 0
 
+    private val numberPickerDialog = SeasonEpisodeDialogFragment.newIntent()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is AddEpisodeCallback) {
             addEpisodeCallback = context
         } else {
             throw RuntimeException("Please implement ShowCallback")
+        }
+    }
+
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+
+        if (childFragment is SeasonEpisodeDialogFragment) {
+            val dialogFragment: SeasonEpisodeDialogFragment = childFragment
+            dialogFragment.setListener(this)
         }
     }
 
@@ -105,13 +115,16 @@ class AddEpisodeFragment: Fragment() {
         btn_save_episode.isEnabled = false
         input_episode_name.addTextChangedListener(AddingEpisodeTextWatcher())
         input_episode_desciption.addTextChangedListener(AddingEpisodeTextWatcher())
+        linear_season_episodes.setOnClickListener {
+            numberPickerDialog.show(childFragmentManager, "NUMBER_PICKER_DIALOG")
+        }
 
         // save button
         btn_save_episode.setOnClickListener {
             val name = input_episode_name.text.toString()
             val description = input_episode_desciption.text.toString()
-
-            addEpisodeCallback?.onEpisodeSave(name, description, mCurrentPhotoPath, showId)
+            val seasonEpisode = tv_season_episodes.text.toString()
+            addEpisodeCallback?.onEpisodeSave(name, description, seasonEpisode, mCurrentPhotoPath, showId)
         }
 
         // image view take picture
@@ -242,9 +255,13 @@ class AddEpisodeFragment: Fragment() {
         }
     }
 
-
     private fun isValid(): Boolean {
         return input_episode_name.text.isNotEmpty() && input_episode_desciption.text.isNotEmpty()
+    }
+
+    override fun onNumberSelected(season: Int, episode: Int) {
+        numberPickerDialog.dismiss()
+        tv_season_episodes.text ="S %02d E %02d".format(season, episode)
     }
 
     /**
@@ -264,7 +281,6 @@ class AddEpisodeFragment: Fragment() {
     }
 }
 
-
 interface AddEpisodeCallback {
-    fun onEpisodeSave(name: String, description: String, imgPath: String?, showId: Int)
+    fun onEpisodeSave(name: String, description: String, season_episode: String, imgPath: String?, showId: Int)
 }

@@ -20,17 +20,16 @@ class EpisodeAdapter(private val dataset: MutableList<Episode>, val action: (Epi
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         holder.bind(dataset[position])
     }
-
-    fun addEpisode(episode: Episode) {
+    /*fun addEpisode(episode: Episode) {
         dataset.add(episode)
         notifyItemInserted(dataset.size-1)
-    }
-
+    }*/
 
     inner class EpisodeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(item: Episode) {
             itemView.tv_item_episode_name.text = item.name
+            itemView.tv_item_season_episode.text = item.episode_season
             itemView.setOnClickListener {action(item)}
         }
     }

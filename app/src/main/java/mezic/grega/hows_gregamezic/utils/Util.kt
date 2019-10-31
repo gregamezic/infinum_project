@@ -30,5 +30,16 @@ class Util {
         const val EPISODE_IMAGE_PATH_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
         const val EPISODE_NAME = "mezic.grega.shows.EPISODE_NAME"
         const val EPISODE_DESCRIPTION = "mezic.grega.shows.EPISODE_DESCRIPTION"
+
+
+        // NUMBER PICKER DIALOG
+        const val MIN_SEASON_VALUE = 1
+        const val MAX_SEASON_VALUE = 20
+
+        const val MIN_EPISODE_VALUE = 1
+        const val MAX_EPISODE_VALUE = 99
+
+        const val DEFAULT_NUMBER_PICKER_VALUE = 1
+
     }
 }

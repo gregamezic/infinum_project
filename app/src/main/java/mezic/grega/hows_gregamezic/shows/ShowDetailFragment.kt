@@ -8,13 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_show_detail.*
+import kotlinx.android.synthetic.main.fragment_show_detail.*
 import kotlinx.android.synthetic.main.view_no_episodes.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.episodes.dummy.EpisodeAdapter
-import mezic.grega.hows_gregamezic.shows.dummy.Show
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
@@ -69,7 +68,7 @@ class ShowDetailFragment: Fragment() {
         showDescription = arguments?.getString(Util.SHOW_DESCRIPTION_KEY, "")
 
         // get id of the show
-        showId = ShowFragment.shows.indexOfFirst { it.name == showName }
+        showId = MainFragmentActivity.shows.indexOfFirst { it.name == showName }
 
         // add description text
         show_detail_description.text = showDescription
@@ -88,7 +87,7 @@ class ShowDetailFragment: Fragment() {
         (episodes_recycle_view as RecyclerView).adapter = adapter
 
         //set screen
-        if (ShowFragment.shows[showId].episodes.isEmpty())
+        if (MainFragmentActivity.shows[showId].episodes.isEmpty())
             setEmptyScreen()
         else
             setEpisodesScreen()
@@ -98,18 +97,16 @@ class ShowDetailFragment: Fragment() {
         linear_view_no_episodes.visibility = View.GONE
         episodes_recycle_view.visibility = View.VISIBLE
 
-        adapter = EpisodeAdapter(ShowFragment.shows[showId].episodes) {
+        adapter = EpisodeAdapter(MainFragmentActivity.shows[showId].episodes) {
             toast(it.name)
         }
         (episodes_recycle_view as RecyclerView).adapter = adapter
-
     }
 
     private fun setEmptyScreen() {
         linear_view_no_episodes.visibility = View.VISIBLE
         episodes_recycle_view.visibility = View.GONE
     }
-
 
     private fun setAddEpisodeListeners() {
         tv_add_episodes.setOnClickListener {
