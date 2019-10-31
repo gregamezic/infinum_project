@@ -41,6 +41,7 @@
         <activity
             android:name=".episodes.AddEpisodeActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".MainFragmentActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

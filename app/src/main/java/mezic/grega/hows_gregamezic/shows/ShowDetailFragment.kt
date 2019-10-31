@@ -3,32 +3,60 @@ package mezic.grega.hows_gregamezic.shows
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_show_detail.*
 import kotlinx.android.synthetic.main.view_no_episodes.*
-import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.utils.Util
 import mezic.grega.hows_gregamezic.episodes.AddEpisodeActivity
 import mezic.grega.hows_gregamezic.episodes.dummy.Episode
 import mezic.grega.hows_gregamezic.episodes.dummy.EpisodeAdapter
+import mezic.grega.hows_gregamezic.utils.ToolbarHelper
+import mezic.grega.hows_gregamezic.utils.Util
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
 
-class ShowDetailActivity : MainBaseActivity() {
+class ShowDetailFragment: Fragment() {
 
+    // Instance
+    companion object {
+        fun newIntent(name: String, description: String, year: String?): ShowDetailFragment {
+            val args = Bundle()
+            args.putString(Util.SHOW_NAME_KEY, name)
+            args.putString(Util.SHOW_DESCRIPTION_KEY, description)
+            val fragment = ShowDetailFragment()
+            fragment.arguments = args
+            return fragment
+        }
+
+        var showDetailCallback: ShowDetailCallback? = null
+    }
+
+    // vars
     private var adapter: EpisodeAdapter = EpisodeAdapter(mutableListOf()) {
-        toast(it.name)
+        context?.toast(it.name)
     }
     private var showId: Int = -1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show_detail)
 
-        val name = intent.getStringExtra(Util.SHOW_NAME_KEY)
-        val description = intent.getStringExtra(Util.SHOW_DESCRIPTION_KEY)
+    // functions
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_show_detail, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val name = arguments?.getString(Util.SHOW_NAME_KEY, "")
+        val description = arguments?.getString(Util.SHOW_DESCRIPTION_KEY, "")
 
         // get id of the show
         showId = ShowActivity.shows.indexOfFirst { it.name == name }
@@ -37,13 +65,13 @@ class ShowDetailActivity : MainBaseActivity() {
         show_detail_description.text = description
 
         // set toolbar title
-        setupToolbar(name)
+        context?.let { ToolbarHelper(it).setupToolbar(name) }
 
         // add episode listeners
         setAddEpisodeListeners()
 
         // attach the adapter
-        (episodes_recycle_view as RecyclerView).layoutManager = LinearLayoutManager(this)
+        (episodes_recycle_view as RecyclerView).layoutManager = LinearLayoutManager(context)
         (episodes_recycle_view as RecyclerView).adapter = adapter
 
         //set screen
@@ -87,7 +115,7 @@ class ShowDetailActivity : MainBaseActivity() {
     }
 
     private fun addEpisode() {
-        val intent = Intent(this, AddEpisodeActivity::class.java)
+        val intent = Intent(context, AddEpisodeActivity::class.java)
         startActivityForResult(intent, Util.EPISODE_ADD_EPISODE_REQUEST_CODE)
     }
 
@@ -114,5 +142,16 @@ class ShowDetailActivity : MainBaseActivity() {
         adapter.addEpisode(episode)
     }
 
+    /*private fun setAddEpisodeListeners() {
+        tv_add_episodes.setOnClickListener {
+            showDetailCallback?.onAddEpisode(showId)
+        }
+        fab_add_episode.setOnClickListener {
+            showDetailCallback?.onAddEpisode(showId)
+        }
+    }*/
+}
 
+interface ShowDetailCallback {
+    fun onAddEpisode(showId: Int)
 }

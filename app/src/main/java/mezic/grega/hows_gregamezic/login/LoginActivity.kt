@@ -10,8 +10,10 @@ import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import kotlinx.android.synthetic.main.activity_login.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
+import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.shows.ShowActivity
+import mezic.grega.hows_gregamezic.shows.ShowFragment
 import mezic.grega.hows_gregamezic.utils.Util
 
 class LoginActivity : MainBaseActivity() {
@@ -22,7 +24,7 @@ class LoginActivity : MainBaseActivity() {
 
         // check if user is already logged in
         if (mSharedPreferencesManager.isUserLogin()) {
-            startActivity(Intent(this, ShowActivity::class.java))
+            startActivity(Intent(this, MainFragmentActivity::class.java))
             finish()
         }
 

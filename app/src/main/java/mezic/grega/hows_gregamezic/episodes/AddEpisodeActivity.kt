@@ -26,16 +26,13 @@ import mezic.grega.hows_gregamezic.utils.Util
 import mezic.grega.hows_gregamezic.utils.Util.Companion.PERMISSION_CAMERA_REQUEST_CODE
 import mezic.grega.hows_gregamezic.utils.Util.Companion.PERMISSION_READ_EXTERNAL_REQUEST_CODE
 import mezic.grega.hows_gregamezic.utils.Util.Companion.REQUEST_IMAGE_CAPTURE
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.selector
-import org.jetbrains.anko.yesButton
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import mezic.grega.hows_gregamezic.utils.Util.Companion.REQUEST_IMAGE_GALLERY
+import org.jetbrains.anko.*
 
 
 class AddEpisodeActivity: MainBaseActivity() {
