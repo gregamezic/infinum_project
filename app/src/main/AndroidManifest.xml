@@ -18,6 +18,8 @@
 
         <activity android:name=".login.WelcomeActivity" />
 
+        <activity android:name=".login.RegisterActivity" />
+
         <activity android:name=".MainBaseActivity" />
         <activity android:name=".MainFragmentActivity"
             android:windowSoftInputMode="adjustPan"

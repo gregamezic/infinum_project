@@ -25,13 +25,6 @@ open class MainBaseActivity : AppCompatActivity() {
         }
     }
 
-    /*protected fun toast(message: String, long: Boolean = false) {
-        if (long)
-            Toast.makeText(this, message, LENGTH_LONG).show()
-        else
-            Toast.makeText(this, message, LENGTH_SHORT).show()
-    }*/
-
 
     /**
      * Logger wrappers
