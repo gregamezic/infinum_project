@@ -1,18 +1,25 @@
 package mezic.grega.hows_gregamezic.shows.dummy
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.view_show_item.view.*
-import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.network.ShowItem
+import mezic.grega.hows_gregamezic.utils.Util
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import mezic.grega.hows_gregamezic.ShowApp
 
-class ShowsAdapter(private val dataset: List<Show>, val action: (Show) -> Unit) :
+
+class ShowsAdapter(private val dataset: List<ShowItem>, val action: (ShowItem) -> Unit) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_show_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(mezic.grega.hows_gregamezic.R.layout.view_show_item, parent, false)
         return ShowViewHolder(view)
     }
 
@@ -27,11 +34,22 @@ class ShowsAdapter(private val dataset: List<Show>, val action: (Show) -> Unit) 
 
     inner class ShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(item: Show) {
+        fun bind(item: ShowItem) {
+
             with(itemView) {
-                image_show_item.setImageResource(item.id)
-                tv_shows_title_item.text = item.name
-                tv_shows_date_item.text = item.year
+                val glideUrl = GlideUrl(
+                    "${Util.BASE_URL}/api/shows${item.imageUrl}",
+                    LazyHeaders.Builder()
+                        .addHeader("Authorization", ShowApp.mSharedPreferencesManager.getUserToken())
+                        .build()
+                )
+
+                Glide.with(this)
+                    .load(glideUrl)
+                    .into(image_show_item)
+
+
+                tv_shows_title_item.text = item.title
                 setOnClickListener {action(item)}
             }
         }

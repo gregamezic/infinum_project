@@ -11,12 +11,24 @@
     <include
         layout="@layout/view_toolbar" />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:backgroundTint="@color/pale_pink_disabled"
+        android:indeterminateOnly="true"
+        android:indeterminateTint="@color/pale_pink_pressed"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
     <TextView
         android:id="@+id/show_detail_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/default_padding"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar"
         android:textSize="@dimen/default_font"
         tools:text="This is a short description for a specific show."
         android:textColor="@color/text_gray"/>

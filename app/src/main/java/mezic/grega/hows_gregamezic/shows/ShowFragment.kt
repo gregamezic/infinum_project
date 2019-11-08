@@ -8,14 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_shows.*
-import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.shows.dummy.Show
+import mezic.grega.hows_gregamezic.network.Shows
+import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.shows.dummy.ShowsAdapter
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.yesButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.RuntimeException
 
 class ShowFragment : Fragment() {
@@ -61,11 +65,33 @@ class ShowFragment : Fragment() {
             }?.show()
         }
 
-        showsRecycleView.layoutManager = LinearLayoutManager(context)
-        showsRecycleView.adapter = ShowsAdapter(MainFragmentActivity.shows) {
-            showCallback?.onShowItemClick(it.name, it.description, it.year)
-        }
+
+        progressbar.visibility = View.VISIBLE
+        SingletonApi.service.getShows().enqueue(object : Callback<Shows> {
+            override fun onFailure(call: Call<Shows>, t: Throwable) {
+                progressbar.visibility = View.GONE
+                t.message?.let { toast(it) }
+                error(t)
+            }
+
+            override fun onResponse(call: Call<Shows>, response: Response<Shows>) {
+                progressbar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    val items = response.body()?.data
+                    if (items != null) {
+                        showsRecycleView.layoutManager = LinearLayoutManager(context)
+                        showsRecycleView.adapter = ShowsAdapter(items) {
+                            showCallback?.onShowItemClick(it._id)
+                        }
+                    }
+                } else {
+                    toast("Error! Something went wrong, please try again")
+                }
+            }
+
+        })
     }
+
 
     private fun logout() {
         showCallback?.onLogout()
@@ -75,5 +101,5 @@ class ShowFragment : Fragment() {
 
 interface ShowCallback {
     fun onLogout()
-    fun onShowItemClick(name: String, description: String, year: String)
+    fun onShowItemClick(_id: String)
 }

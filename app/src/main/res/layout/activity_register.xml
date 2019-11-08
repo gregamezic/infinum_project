@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <include layout="@layout/view_toolbar" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:backgroundTint="@color/pale_pink_disabled"
+        android:indeterminateOnly="true"
+        android:indeterminateTint="@color/pale_pink_pressed"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_layout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/input_email_registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_username"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/colorHint"
+            android:textSize="@dimen/default_font" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_password_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_email"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/pale_pink_disabled">
+
+        <EditText
+            android:id="@+id/input_password_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:textSize="@dimen/default_font" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_password_register_again"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/input_layout_password_register"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/pale_pink_disabled">
+
+        <EditText
+            android:id="@+id/input_password_register_again"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_password_again"
+            android:inputType="textPassword"
+            android:textSize="@dimen/default_font" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        android:background="@drawable/button_click_selector"
+        android:text="@string/button_register_text"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+
+        app:layout_constraintTop_toBottomOf="@+id/input_layout_password_register_again" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

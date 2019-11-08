@@ -5,7 +5,9 @@
     <!-- LOGIN ACTIVITY -->
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
+    <string name="hint_password_again">Password again</string>
     <string name="button_login_text">LOG IN</string>
+    <string name="button_register_text">REGISTER</string>
     <string name="welcome_message">You\'re in!</string>
     <string name="dialog_exit_message">Are you sure you want to cancel? All of your data will not be saved</string>
     <string name="dialog_exit_title">Cancel adding episode</string>
@@ -27,5 +29,9 @@
     <string name="season">Season</string>
     <string name="save">SAVE</string>
     <string name="episode">Episode</string>
+    <string name="e_mail">e-mail</string>
+    <string name="register_name">Register</string>
+    <string name="or">or</string>
+    <string name="create_an_account">Create an account</string>
 
 </resources>

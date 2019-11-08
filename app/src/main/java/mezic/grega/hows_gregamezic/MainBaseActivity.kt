@@ -15,7 +15,7 @@ open class MainBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSharedPreferencesManager = (application as ShowApp).mSharedPreferencesManager
+        mSharedPreferencesManager = ShowApp.mSharedPreferencesManager
     }
 
     protected fun setupToolbar(name: String) {

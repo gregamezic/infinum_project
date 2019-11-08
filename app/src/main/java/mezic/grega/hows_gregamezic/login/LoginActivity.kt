@@ -2,7 +2,6 @@ package mezic.grega.hows_gregamezic.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,9 +11,19 @@ import kotlinx.android.synthetic.main.activity_login.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.network.UserRegister
+import mezic.grega.hows_gregamezic.network.UserRegisterResult
+import mezic.grega.hows_gregamezic.network.SingletonApi
+import mezic.grega.hows_gregamezic.network.UserLoginResult
 import mezic.grega.hows_gregamezic.utils.Util
+import org.jetbrains.anko.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : MainBaseActivity() {
+
+    private val TAG: String = LoginActivity::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +47,11 @@ class LoginActivity : MainBaseActivity() {
             }
         }
 
+
+        text_create_account.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
         //set custom text change listeners
         input_username.addTextChangedListener(LoginTextWatcher())
         input_password.addTextChangedListener(LoginTextWatcher())
@@ -46,21 +60,46 @@ class LoginActivity : MainBaseActivity() {
     private fun login() {
         progressbar.visibility = View.VISIBLE
 
-        Handler().postDelayed({
-            val username: String = input_username.text.toString()
-            val intent : Intent = Intent(this, WelcomeActivity::class.java).apply {
-                putExtra(Util.USERNAME_KEY, username)
-            }
+        val email: String = input_username.text.toString()
+        val password: String = input_password.text.toString()
 
-            // save checked state to shared prefs
-            mSharedPreferencesManager.setUserLogin(cb_remember_login.isChecked)
+        val token = mSharedPreferencesManager.getUserToken()
+        /*val token = mSharedPreferencesManager.getUserToken()
 
-            progressbar.visibility = View.GONE
+        logd(TAG, token)*/
 
-            // start the activity
-            startActivity(intent)
-            finish()
-        }, 2500)
+        SingletonApi.service.loginUser(UserRegister(email, password))
+            .enqueue(object: Callback<UserLoginResult>{
+                override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
+                    toast("Error! Please try to login again!")
+                    progressbar.visibility = View.GONE
+                }
+
+                override fun onResponse(call: Call<UserLoginResult>, response: Response<UserLoginResult>) {
+
+                    progressbar.visibility = View.GONE
+
+                    if (response.isSuccessful) {
+
+                        val token = response.body()?.data?.token
+                        mSharedPreferencesManager.setUserToken(token)
+
+                        val intent : Intent = Intent(this@LoginActivity, MainFragmentActivity::class.java).apply {
+                            putExtra(Util.USERNAME_KEY, email)
+                        }
+
+                        // save checked state to shared prefs
+                        mSharedPreferencesManager.setUserLogin(cb_remember_login.isChecked)
+
+
+                        // start the activity
+                        startActivity(intent)
+                        finish()
+                    } else
+                        toast("Error! Please try to login again!")
+                }
+
+            })
     }
 
     private fun isLoginValid(): Boolean {

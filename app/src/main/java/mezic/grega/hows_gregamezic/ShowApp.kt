@@ -7,7 +7,10 @@ import mezic.grega.hows_gregamezic.utils.Util
 
 class ShowApp : Application() {
 
-    lateinit var mSharedPreferencesManager: SharedPreferencesManager
+    companion object {
+
+        lateinit var mSharedPreferencesManager: SharedPreferencesManager
+    }
 
     override fun onCreate() {
         super.onCreate()

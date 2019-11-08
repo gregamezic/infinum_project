@@ -90,4 +90,31 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/cb_remember_login" />
 
+
+    <TextView
+        android:id="@+id/text_or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/text_black"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:text="@string/or"/>
+
+    <TextView
+        android:id="@+id/text_create_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/text_or"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/pink_episodes"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:text="@string/create_an_account"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

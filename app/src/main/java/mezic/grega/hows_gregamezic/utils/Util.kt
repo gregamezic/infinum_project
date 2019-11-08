@@ -41,5 +41,8 @@ class Util {
 
         const val DEFAULT_NUMBER_PICKER_VALUE = 1
 
+
+        const val BASE_URL = "https://api.infinum.academy/api/"
+
     }
 }

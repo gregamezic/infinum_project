@@ -22,7 +22,12 @@ import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.ShowApp
+import mezic.grega.hows_gregamezic.network.AddEpisode
+import mezic.grega.hows_gregamezic.network.AddEpisodeResult
+import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
+import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
@@ -30,6 +35,9 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.selector
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.yesButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -37,10 +45,12 @@ import java.util.*
 
 class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
     companion object {
-        fun newIntent(showId : Int?) : AddEpisodeFragment {
+        fun newIntent(showId : String) : AddEpisodeFragment {
             val args = Bundle()
-            showId?.let { args.putInt(Util.SHOW_ID_KEY, it) }
-            return AddEpisodeFragment()
+            args.putString(Util.SHOW_ID_KEY, showId)
+            val fragment = AddEpisodeFragment()
+            fragment.arguments = args
+            return fragment
         }
 
         var addEpisodeCallback: AddEpisodeCallback? = null
@@ -48,8 +58,10 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
     // my val's
     private val TAG : String = AddEpisodeFragment::class.java.name
-    private var mCurrentPhotoPath: String? = null
-    private var showId: Int = 0
+    private var  mCurrentPhotoPath: String = ""
+    private var seasonText: String = "S 01"
+    private var episodeText: String = "E 01"
+    private var showId: String = ""
 
     private val numberPickerDialog = SeasonEpisodeDialogFragment.newIntent()
 
@@ -83,7 +95,7 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val nullableShowId = arguments?.getInt(Util.SHOW_ID_KEY, 0)
+        val nullableShowId = arguments?.getString(Util.SHOW_ID_KEY, "")
         nullableShowId?.let { showId = nullableShowId }
 
         // set toolbar title
@@ -121,10 +133,29 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
         // save button
         btn_save_episode.setOnClickListener {
+            progressbar.visibility = View.VISIBLE
+
             val name = input_episode_name.text.toString()
             val description = input_episode_desciption.text.toString()
-            val seasonEpisode = tv_season_episodes.text.toString()
-            addEpisodeCallback?.onEpisodeSave(name, description, seasonEpisode, mCurrentPhotoPath, showId)
+
+
+            val newEpisode = AddEpisode(showId, mCurrentPhotoPath, name, description, episodeText, seasonText)
+            SingletonApi.service.addEpisode(ShowApp.mSharedPreferencesManager.getUserToken(), newEpisode).enqueue(object: Callback<AddEpisodeResult> {
+                override fun onFailure(call: Call<AddEpisodeResult>, t: Throwable) {
+                    progressbar.visibility = View.GONE
+                    t.message?.let { toast(it) }
+                    error(t)
+                }
+
+                override fun onResponse(call: Call<AddEpisodeResult>, response: Response<AddEpisodeResult>) {
+                    progressbar.visibility = View.GONE
+                    if (response.isSuccessful) {
+                        addEpisodeCallback?.onEpisodeSave(showId)
+                        toast("Episode successfully added!")
+                    } else
+                        toast("Error! Something went wrong, please try again")
+                }
+            })
         }
 
         // image view take picture
@@ -239,7 +270,10 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
                 try {
                     val selectedImage: Uri? = data.data
-                    mCurrentPhotoPath = selectedImage?.path
+
+                    if (selectedImage != null) {
+                        mCurrentPhotoPath = selectedImage.path
+                    }
 
                     val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, selectedImage)
                     img_episode_camera.setImageBitmap(bitmap)
@@ -282,5 +316,5 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 }
 
 interface AddEpisodeCallback {
-    fun onEpisodeSave(name: String, description: String, season_episode: String, imgPath: String?, showId: Int)
+    fun onEpisodeSave(showId: String)
 }

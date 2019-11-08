@@ -14,18 +14,23 @@ import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.episodes.dummy.EpisodeAdapter
+import mezic.grega.hows_gregamezic.network.Episodes
+import mezic.grega.hows_gregamezic.network.Show
+import mezic.grega.hows_gregamezic.network.ShowDetail
+import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ShowDetailFragment: Fragment() {
 
     // Instance
     companion object {
-        fun newIntent(name: String?, description: String?): ShowDetailFragment {
+        fun newIntent(_id: String): ShowDetailFragment {
             val args = Bundle()
-            args.putString(Util.SHOW_NAME_KEY, name)
-            args.putString(Util.SHOW_DESCRIPTION_KEY, description)
+            args.putString(Util.SHOW_ID_KEY, _id)
             val fragment = ShowDetailFragment()
             fragment.arguments = args
             return fragment
@@ -34,11 +39,7 @@ class ShowDetailFragment: Fragment() {
         var showDetailCallback: ShowDetailCallback? = null
     }
 
-    // vars
-    private var adapter: EpisodeAdapter = EpisodeAdapter(mutableListOf()) {
-        context?.toast(it.name)
-    }
-    private var showId: Int = -1
+    private var showId: String = ""
     private var showName: String? = ""
     private var showDescription: String? = ""
 
@@ -64,48 +65,83 @@ class ShowDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showName = arguments?.getString(Util.SHOW_NAME_KEY, "")
-        showDescription = arguments?.getString(Util.SHOW_DESCRIPTION_KEY, "")
+        progressbar.visibility = View.VISIBLE
 
-        // get id of the show
-        showId = MainFragmentActivity.shows.indexOfFirst { it.name == showName }
+        val showNulableId = arguments?.getString(Util.SHOW_ID_KEY)
+        if (showNulableId != null)
+            showId = showNulableId
 
-        // add description text
-        show_detail_description.text = showDescription
+        // get show details
+        SingletonApi.service.getShow(showId).enqueue(object: Callback<Show>{
+            override fun onFailure(call: Call<Show>, t: Throwable) {
+                t.message?.let { toast(it) }
+                error(t)
+            }
 
-        // set toolbar title
-        my_toolbar.title = showName
-        my_toolbar.setNavigationOnClickListener {
-            (context as MainFragmentActivity).supportFragmentManager.popBackStack()
-        }
+            override fun onResponse(call: Call<Show>, response: Response<Show>) {
+                if (response.isSuccessful) {
+                    val showItem: ShowDetail? = response.body()?.data
+
+                    if (showItem != null) {
+                        showName = showItem.title
+                        showDescription = showItem.description
+
+                        // add description text
+                        show_detail_description.text = showDescription
+
+                        // set toolbar title
+                        my_toolbar.title = showName
+                        my_toolbar.setNavigationOnClickListener {
+                            (context as MainFragmentActivity).supportFragmentManager.popBackStack()
+                        }
+                    }
+                } else {
+                    toast("Error! Something went wrong, please try again")
+                }
+            }
+        })
+
+
+        // get episode list
+        SingletonApi.service.getEpisodes(showId).enqueue(object: Callback<Episodes>{
+            override fun onFailure(call: Call<Episodes>, t: Throwable) {
+                progressbar.visibility = View.GONE
+                t.message?.let { toast(it) }
+                error(t)
+            }
+
+            override fun onResponse(call: Call<Episodes>, response: Response<Episodes>) {
+                progressbar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    val episodes = response.body()?.data
+
+                    if (episodes != null) {
+
+                        if (episodes.size > 0) {
+
+                            linear_view_no_episodes.visibility = View.GONE
+                            episodes_recycle_view.visibility = View.VISIBLE
+
+                            // attach the adapter
+                            (episodes_recycle_view as RecyclerView).layoutManager =
+                                LinearLayoutManager(context)
+                            (episodes_recycle_view as RecyclerView).adapter =
+                                EpisodeAdapter(episodes) {
+                                    toast(it.title)
+                                }
+                        } else {
+                            linear_view_no_episodes.visibility = View.VISIBLE
+                            episodes_recycle_view.visibility = View.GONE
+                        }
+                    }
+                }
+
+            }
+
+        })
 
         // add episode listeners
         setAddEpisodeListeners()
-
-        // attach the adapter
-        (episodes_recycle_view as RecyclerView).layoutManager = LinearLayoutManager(context)
-        (episodes_recycle_view as RecyclerView).adapter = adapter
-
-        //set screen
-        if (MainFragmentActivity.shows[showId].episodes.isEmpty())
-            setEmptyScreen()
-        else
-            setEpisodesScreen()
-    }
-
-    private fun setEpisodesScreen() {
-        linear_view_no_episodes.visibility = View.GONE
-        episodes_recycle_view.visibility = View.VISIBLE
-
-        adapter = EpisodeAdapter(MainFragmentActivity.shows[showId].episodes) {
-            toast(it.name)
-        }
-        (episodes_recycle_view as RecyclerView).adapter = adapter
-    }
-
-    private fun setEmptyScreen() {
-        linear_view_no_episodes.visibility = View.VISIBLE
-        episodes_recycle_view.visibility = View.GONE
     }
 
     private fun setAddEpisodeListeners() {
@@ -119,5 +155,5 @@ class ShowDetailFragment: Fragment() {
 }
 
 interface ShowDetailCallback {
-    fun onAddEpisode(showId: Int, showName: String?, showDescription: String?)
+    fun onAddEpisode(showId: String, showName: String?, showDescription: String?)
 }
