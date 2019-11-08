@@ -26,9 +26,11 @@ class EpisodeAdapter(private val dataset: List<EpisodeItem>, val action: (Episod
     inner class EpisodeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(item: EpisodeItem) {
-            itemView.tv_item_episode_name.text = item.title
-            itemView.tv_item_season_episode.text = "${item.season.trim()} ${item.episodeNumber.trim()}"
-            itemView.setOnClickListener {action(item)}
+            with(itemView) {
+                tv_item_episode_name.text = item.title
+                tv_item_season_episode.text = "${item.season.trim()} ${item.episodeNumber.trim()}"
+                setOnClickListener {action(item)}
+            }
         }
     }
 }

@@ -1,11 +1,15 @@
 package mezic.grega.hows_gregamezic
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import mezic.grega.hows_gregamezic.episodes.AddEpisodeCallback
 import mezic.grega.hows_gregamezic.episodes.AddEpisodeFragment
 import mezic.grega.hows_gregamezic.login.LoginActivity
 import mezic.grega.hows_gregamezic.shows.*
+import mezic.grega.hows_gregamezic.utils.Util
+import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.toast
 
 
 class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback {
@@ -46,7 +50,6 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallbac
         this.showName = showName
         this.showDescription = showDescription
 
-        //supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, AddEpisodeFragment.newIntent(this.showId))
             .addToBackStack(AddEpisodeFragment::class.java.name)

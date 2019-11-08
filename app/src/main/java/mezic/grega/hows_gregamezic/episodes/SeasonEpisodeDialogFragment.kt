@@ -41,7 +41,6 @@ class SeasonEpisodeDialogFragment: DialogFragment() {
             val season = numberPicker_season.value
             val episode = numberPicker_episode.value
             callbackListener?.onNumberSelected(season, episode)
-            fragmentManager?.popBackStack()
         }
 
     }

@@ -38,8 +38,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:2.6.2")
     implementation("com.squareup.okhttp3:logging-interceptor:4.2.1")
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     // Anko Layouts
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version" // sdk15, sdk19, sdk21, sdk23 are also available

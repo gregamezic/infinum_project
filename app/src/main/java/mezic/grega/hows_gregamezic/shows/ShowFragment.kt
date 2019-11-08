@@ -31,7 +31,7 @@ class ShowFragment : Fragment() {
             return ShowFragment()
         }
 
-        var showCallback: ShowCallback? = null
+        lateinit var showCallback: ShowCallback
     }
 
     override fun onAttach(context: Context) {
@@ -81,7 +81,7 @@ class ShowFragment : Fragment() {
                     if (items != null) {
                         showsRecycleView.layoutManager = LinearLayoutManager(context)
                         showsRecycleView.adapter = ShowsAdapter(items) {
-                            showCallback?.onShowItemClick(it._id)
+                            showCallback.onShowItemClick(it._id)
                         }
                     }
                 } else {
@@ -94,7 +94,7 @@ class ShowFragment : Fragment() {
 
 
     private fun logout() {
-        showCallback?.onLogout()
+        showCallback.onLogout()
     }
 }
 

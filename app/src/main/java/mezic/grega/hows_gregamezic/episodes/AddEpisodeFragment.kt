@@ -1,5 +1,6 @@
 package mezic.grega.hows_gregamezic.episodes
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -27,13 +28,13 @@ import mezic.grega.hows_gregamezic.network.AddEpisode
 import mezic.grega.hows_gregamezic.network.AddEpisodeResult
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
-import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.selector
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,7 +54,7 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
             return fragment
         }
 
-        var addEpisodeCallback: AddEpisodeCallback? = null
+        lateinit var addEpisodeCallback: AddEpisodeCallback
     }
 
     // my val's
@@ -101,12 +102,11 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
         // set toolbar title
         my_toolbar.title = getString(R.string.add_episode)
         my_toolbar.setNavigationOnClickListener {
-            if (isValid()) {
-                exitDialog(context as MainFragmentActivity)
-            } else
+            if (isSafeToClose())
                 (context as MainFragmentActivity).supportFragmentManager.popBackStack()
+            else
+                exitDialog(context as MainFragmentActivity)
         }
-
         // set view on click listeners
         setupViewsListeners()
     }
@@ -150,7 +150,7 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
                 override fun onResponse(call: Call<AddEpisodeResult>, response: Response<AddEpisodeResult>) {
                     progressbar.visibility = View.GONE
                     if (response.isSuccessful) {
-                        addEpisodeCallback?.onEpisodeSave(showId)
+                        addEpisodeCallback.onEpisodeSave(showId)
                         toast("Episode successfully added!")
                     } else
                         toast("Error! Something went wrong, please try again")
@@ -170,10 +170,10 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
         selector("Select", options) { _, i ->
             when(i) {
                 0 -> if (permissionHelper != null) {
-                    if (permissionHelper.checkCameraPermission()) takePicture() else permissionHelper.requestCameraPermission()
+                    if (permissionHelper.checkCameraPermission()) takePicture() else requestPermissions(arrayOf(Manifest.permission.CAMERA), Util.PERMISSION_CAMERA_REQUEST_CODE)
                 }
                 1 -> if (permissionHelper != null) {
-                    if (permissionHelper.checkReadExternalPermission()) readPicture() else permissionHelper.requestReadExternalPermission()
+                    if (permissionHelper.checkReadExternalPermission()) readPicture() else requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Util.PERMISSION_READ_EXTERNAL_REQUEST_CODE)
                 }
             }
         }
@@ -214,8 +214,6 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
             mCurrentPhotoPath = absolutePath
         }
     }
-
-
 
     /**
      * PERMISSION RESULTS
@@ -291,6 +289,10 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
     private fun isValid(): Boolean {
         return input_episode_name.text.isNotEmpty() && input_episode_desciption.text.isNotEmpty()
+    }
+
+    private fun isSafeToClose(): Boolean {
+        return input_episode_name.text.isEmpty() && input_episode_desciption.text.isEmpty()
     }
 
     override fun onNumberSelected(season: Int, episode: Int) {

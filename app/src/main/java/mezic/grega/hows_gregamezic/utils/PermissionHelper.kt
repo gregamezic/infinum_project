@@ -18,13 +18,6 @@ class PermissionHelper(private val context: Context) {
                 PackageManager.PERMISSION_GRANTED)
     }
 
-    // request
-    fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(
-            context as Activity, arrayOf(Manifest.permission.CAMERA), Util.PERMISSION_CAMERA_REQUEST_CODE
-        )
-    }
-
 
     /**
      * READ EXTERNAL STORAGE PERMISSION
@@ -34,12 +27,4 @@ class PermissionHelper(private val context: Context) {
         return (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED)
     }
-
-    // request
-    fun requestReadExternalPermission() {
-        ActivityCompat.requestPermissions(
-            context as Activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Util.PERMISSION_READ_EXTERNAL_REQUEST_CODE
-        )
-    }
-
 }

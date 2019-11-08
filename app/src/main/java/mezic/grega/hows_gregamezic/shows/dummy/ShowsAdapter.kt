@@ -1,18 +1,12 @@
 package mezic.grega.hows_gregamezic.shows.dummy
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.view_show_item.view.*
 import mezic.grega.hows_gregamezic.network.ShowItem
-import mezic.grega.hows_gregamezic.utils.Util
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
 import com.squareup.picasso.Picasso
-import mezic.grega.hows_gregamezic.ShowApp
 
 
 class ShowsAdapter(private val dataset: List<ShowItem>, val action: (ShowItem) -> Unit) :
