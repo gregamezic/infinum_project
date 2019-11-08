@@ -10,10 +10,7 @@ import kotlinx.android.synthetic.main.activity_register.progressbar
 import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.network.Data
-import mezic.grega.hows_gregamezic.network.UserRegister
-import mezic.grega.hows_gregamezic.network.UserRegisterResult
-import mezic.grega.hows_gregamezic.network.SingletonApi
+import mezic.grega.hows_gregamezic.network.*
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
@@ -53,19 +50,9 @@ class RegisterActivity : MainBaseActivity() {
                             error(t)
                         }
                         override fun onResponse(call: Call<UserRegisterResult>, response: Response<UserRegisterResult>) {
-                            progressbar.visibility = View.GONE
                             if (response.isSuccessful) {
-
-                                // get the response data
-                                val data: Data? = response.body()?.data
-
-                                val email = data?.email
-
-                                val intent : Intent = Intent(this@RegisterActivity, WelcomeActivity::class.java).apply {
-                                    putExtra(Util.USERNAME_KEY, email)
-                                }
-                                startActivity(intent)
-                                finish()
+                                // login
+                                createLoginApiCall(email, password)
                             } else
                                 toast("Error! Something went wrong, please try again")
                         }
@@ -73,33 +60,44 @@ class RegisterActivity : MainBaseActivity() {
             }
         }
 
-
-
-        /*object: Callback<UserRegisterData>{
-            override fun onFailure(call: Call<UserRegisterData>, t: Throwable) {
-                toast(t.message.toString())
-                error(t.message.toString())
-            }
-
-            override fun onResponse(call: Call<UserRegisterData>, response: Response<User>) {
-                if (response.isSuccessful) {
-                    startActivity(
-                        Intent(
-                            applicationContext,
-                            WelcomeActivity::class.java
-                        )
-                    )
-                    finish()
-                }
-            }
-        })*/
-
         // set text watch listeners
         input_email_registration.addTextChangedListener(LoginTextWatcher())
         input_password_register.addTextChangedListener(LoginTextWatcher())
         input_password_register_again.addTextChangedListener(LoginTextWatcher())
 
 
+    }
+
+    private fun createLoginApiCall(email: String, password: String) {
+        SingletonApi.service.loginUser(UserRegister(email, password))
+            .enqueue(object: Callback<UserLoginResult>{
+                override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
+                    progressbar.visibility = View.GONE
+                    t.message?.let { toast(it) }
+                    error(t)
+                }
+
+                override fun onResponse(call: Call<UserLoginResult>, response: Response<UserLoginResult>) {
+                    progressbar.visibility = View.GONE
+                    if (response.isSuccessful) {
+
+                        // get the response data
+                        val data: DataLogin? = response.body()?.data
+                        //get the token and save it
+                        val token = data?.token
+                        mSharedPreferencesManager.setUserToken(token)
+
+                        // start welcome activity
+                        val intent : Intent = Intent(this@RegisterActivity, WelcomeActivity::class.java).apply {
+                            putExtra(Util.USERNAME_KEY, email)
+                        }
+                        startActivity(intent)
+                        finish()
+                    } else
+                        toast("Error! Something went wrong, please try again")
+                }
+
+            })
     }
 
 

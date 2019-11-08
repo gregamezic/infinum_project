@@ -63,11 +63,6 @@ class LoginActivity : MainBaseActivity() {
         val email: String = input_username.text.toString()
         val password: String = input_password.text.toString()
 
-        val token = mSharedPreferencesManager.getUserToken()
-        /*val token = mSharedPreferencesManager.getUserToken()
-
-        logd(TAG, token)*/
-
         SingletonApi.service.loginUser(UserRegister(email, password))
             .enqueue(object: Callback<UserLoginResult>{
                 override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {

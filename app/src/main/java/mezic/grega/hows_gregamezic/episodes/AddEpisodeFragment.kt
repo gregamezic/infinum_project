@@ -28,6 +28,7 @@ import mezic.grega.hows_gregamezic.network.AddEpisode
 import mezic.grega.hows_gregamezic.network.AddEpisodeResult
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
+import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
@@ -140,28 +141,41 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
 
             val newEpisode = AddEpisode(showId, mCurrentPhotoPath, name, description, episodeText, seasonText)
-            SingletonApi.service.addEpisode(ShowApp.mSharedPreferencesManager.getUserToken(), newEpisode).enqueue(object: Callback<AddEpisodeResult> {
-                override fun onFailure(call: Call<AddEpisodeResult>, t: Throwable) {
-                    progressbar.visibility = View.GONE
-                    t.message?.let { toast(it) }
-                    error(t)
-                }
+            val token = ShowApp.mSharedPreferencesManager.getUserToken()
 
-                override fun onResponse(call: Call<AddEpisodeResult>, response: Response<AddEpisodeResult>) {
-                    progressbar.visibility = View.GONE
-                    if (response.isSuccessful) {
-                        addEpisodeCallback.onEpisodeSave(showId)
-                        toast("Episode successfully added!")
-                    } else
-                        toast("Error! Something went wrong, please try again")
-                }
-            })
+
+            // CREATE API CALL!
+            //check if user has token
+            if (token == SharedPreferencesManager.DEFAULT_TOKEN) {
+                toast("Please login with your email or register!")
+                addEpisodeCallback.noToken()
+            }
+            else createApiCall(newEpisode)
         }
 
         // image view take picture
         linear_camera.setOnClickListener {
             openSelector()
         }
+    }
+
+    private fun createApiCall(episode: AddEpisode) {
+        SingletonApi.service.addEpisode(ShowApp.mSharedPreferencesManager.getUserToken(), episode).enqueue(object: Callback<AddEpisodeResult> {
+            override fun onFailure(call: Call<AddEpisodeResult>, t: Throwable) {
+                progressbar.visibility = View.GONE
+                t.message?.let { toast(it) }
+                error(t)
+            }
+
+            override fun onResponse(call: Call<AddEpisodeResult>, response: Response<AddEpisodeResult>) {
+                progressbar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    addEpisodeCallback.onEpisodeSave(showId)
+                    toast("Episode successfully added!")
+                } else
+                    toast("Error! Something went wrong, please try again")
+            }
+        })
     }
 
     private fun openSelector() {
@@ -319,4 +333,5 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
 interface AddEpisodeCallback {
     fun onEpisodeSave(showId: String)
+    fun noToken()
 }

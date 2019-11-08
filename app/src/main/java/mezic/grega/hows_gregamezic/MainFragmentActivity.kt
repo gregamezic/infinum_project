@@ -14,7 +14,6 @@ import org.jetbrains.anko.toast
 
 class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback {
 
-
     private var showId: String = ""
     private var showName: String? = ""
     private var showDescription: String? = ""
@@ -63,5 +62,10 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallbac
             .add(R.id.fragment_container, ShowDetailFragment.newIntent(showId))
             .addToBackStack(ShowDetailFragment::class.java.name)
             .commit()
+    }
+
+    override fun noToken() {
+        startActivity(Intent(this@MainFragmentActivity, LoginActivity::class.java))
+        finish()
     }
 }

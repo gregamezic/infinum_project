@@ -11,7 +11,6 @@ interface ApiService {
 
     @POST("/api/users/sessions")
     fun loginUser(
-        //@Header("Authorization") authorization: String,
         @Body userLogin: UserRegister): Call<UserLoginResult>
 
 
