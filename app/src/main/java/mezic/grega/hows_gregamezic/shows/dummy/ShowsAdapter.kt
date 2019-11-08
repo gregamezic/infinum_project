@@ -11,6 +11,7 @@ import mezic.grega.hows_gregamezic.utils.Util
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.squareup.picasso.Picasso
 import mezic.grega.hows_gregamezic.ShowApp
 
 
@@ -37,18 +38,7 @@ class ShowsAdapter(private val dataset: List<ShowItem>, val action: (ShowItem) -
         fun bind(item: ShowItem) {
 
             with(itemView) {
-                val glideUrl = GlideUrl(
-                    "${Util.BASE_URL}/api/shows${item.imageUrl}",
-                    LazyHeaders.Builder()
-                        .addHeader("Authorization", ShowApp.mSharedPreferencesManager.getUserToken())
-                        .build()
-                )
-
-                Glide.with(this)
-                    .load(glideUrl)
-                    .into(image_show_item)
-
-
+                Picasso.get().load("https://api.infinum.academy${item.imageUrl}").into(image_show_item)
                 tv_shows_title_item.text = item.title
                 setOnClickListener {action(item)}
             }
