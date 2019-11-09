@@ -8,7 +8,7 @@ import mezic.grega.hows_gregamezic.utils.Util
 class ShowApp : Application() {
 
     companion object {
-
+        lateinit var instance: ShowApp
         lateinit var mSharedPreferencesManager: SharedPreferencesManager
     }
 
