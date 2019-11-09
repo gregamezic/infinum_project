@@ -1,11 +1,10 @@
-package mezic.grega.hows_gregamezic.episodes
+package mezic.grega.hows_gregamezic.ui.episodes
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_season_episode_dialog.*
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.utils.Util

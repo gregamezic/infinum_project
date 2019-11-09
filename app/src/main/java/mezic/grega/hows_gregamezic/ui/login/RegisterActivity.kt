@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.login
+package mezic.grega.hows_gregamezic.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,12 +7,10 @@ import android.text.TextWatcher
 import android.view.View
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.progressbar
-import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.network.*
 import mezic.grega.hows_gregamezic.utils.Util
-import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback

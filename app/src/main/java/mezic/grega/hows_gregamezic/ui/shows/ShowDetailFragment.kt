@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.shows
+package mezic.grega.hows_gregamezic.ui.shows
 
 import android.content.Context
 import android.os.Bundle
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.view_no_episodes.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.episodes.dummy.EpisodeAdapter
+import mezic.grega.hows_gregamezic.ui.episodes.dummy.EpisodeAdapter
 import mezic.grega.hows_gregamezic.network.Episodes
 import mezic.grega.hows_gregamezic.network.Show
 import mezic.grega.hows_gregamezic.network.ShowDetail

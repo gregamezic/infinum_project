@@ -1,12 +1,12 @@
-package mezic.grega.hows_gregamezic.database
+package mezic.grega.hows_gregamezic.database.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "shows")
-data class Show(
+@Entity(tableName = "shows-table")
+data class ShowModelDb(
 
     @PrimaryKey(autoGenerate = false)
     val id: String,
@@ -15,6 +15,9 @@ data class Show(
     val title: String,
 
     @ColumnInfo(name = "imageUrl")
-    val imageUrl: String
+    val imageUrl: String,
+
+    @ColumnInfo(name = "likesCount")
+    val likesCount: Int
 
 ): Serializable

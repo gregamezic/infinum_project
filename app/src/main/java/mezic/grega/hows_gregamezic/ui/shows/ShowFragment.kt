@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.shows
+package mezic.grega.hows_gregamezic.ui.shows
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.network.Shows
 import mezic.grega.hows_gregamezic.network.SingletonApi
-import mezic.grega.hows_gregamezic.shows.dummy.ShowsAdapter
+import mezic.grega.hows_gregamezic.ui.shows.dummy.ShowsAdapter
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton

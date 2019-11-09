@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.episodes.dummy
+package mezic.grega.hows_gregamezic.ui.episodes.dummy
 
 import android.view.LayoutInflater
 import android.view.View

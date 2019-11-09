@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.episodes
+package mezic.grega.hows_gregamezic.ui.episodes
 
 import android.Manifest
 import android.app.Activity
@@ -35,7 +35,6 @@ import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.selector
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.login
+package mezic.grega.hows_gregamezic.ui.login
 
 import android.content.Intent
 import android.os.Bundle

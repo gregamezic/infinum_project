@@ -1,4 +1,4 @@
-package mezic.grega.hows_gregamezic.login
+package mezic.grega.hows_gregamezic.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,6 @@ import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.network.UserRegister
-import mezic.grega.hows_gregamezic.network.UserRegisterResult
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.network.UserLoginResult
 import mezic.grega.hows_gregamezic.utils.Util
