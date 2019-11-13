@@ -45,7 +45,8 @@ class Shows(
 class ShowItem(
     val _id: String,
     val title: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val likesCount: Int
 )
 
 /**
@@ -60,7 +61,8 @@ class ShowDetail(
     val title: String,
     val description: String,
     val _id: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val likesCount: Int
 )
 
 

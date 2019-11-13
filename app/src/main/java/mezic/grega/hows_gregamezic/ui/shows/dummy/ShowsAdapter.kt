@@ -9,9 +9,19 @@ import mezic.grega.hows_gregamezic.network.ShowItem
 import com.squareup.picasso.Picasso
 
 
-class ShowsAdapter(private val dataset: List<ShowItem>, val action: (ShowItem) -> Unit) :
+class ShowsAdapter(val clickAction: (ShowItem) -> Unit) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
 
+
+    private var dataset = listOf<ShowItem>()
+
+
+
+
+    fun setData(dataset: List<ShowItem>) {
+        this.dataset = dataset
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(mezic.grega.hows_gregamezic.R.layout.view_show_item, parent, false)
@@ -34,7 +44,7 @@ class ShowsAdapter(private val dataset: List<ShowItem>, val action: (ShowItem) -
             with(itemView) {
                 Picasso.get().load("https://api.infinum.academy${item.imageUrl}").into(image_show_item)
                 tv_shows_title_item.text = item.title
-                setOnClickListener {action(item)}
+                setOnClickListener {clickAction(item)}
             }
         }
     }

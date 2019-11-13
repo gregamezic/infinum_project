@@ -23,6 +23,9 @@ data class EpisodeModelDb(
     @PrimaryKey(autoGenerate = false)
     val id: String,
 
+    @ColumnInfo(name = "show_id")
+    val show_id: String,
+
     @ColumnInfo(name = "title")
     val title: String,
 

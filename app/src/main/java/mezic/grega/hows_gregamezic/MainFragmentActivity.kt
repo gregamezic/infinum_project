@@ -2,10 +2,15 @@ package mezic.grega.hows_gregamezic
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeCallback
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeFragment
 import mezic.grega.hows_gregamezic.ui.login.LoginActivity
 import mezic.grega.hows_gregamezic.ui.shows.*
+import mezic.grega.hows_gregamezic.utils.FragmentBackPressed
+import mezic.grega.hows_gregamezic.viewmodels.ShowViewModel
 
 
 class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback {
@@ -63,5 +68,16 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallbac
     override fun noToken() {
         startActivity(Intent(this@MainFragmentActivity, LoginActivity::class.java))
         finish()
+    }
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (fragment != null && fragment is FragmentBackPressed) {
+            if (!fragment.onBackPressed()) {
+                super.onBackPressed()
+            }
+        } else {
+            super.onBackPressed()
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "shows-table")
 data class ShowModelDb(
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     val id: String,
 
     @ColumnInfo(name = "title")

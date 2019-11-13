@@ -6,36 +6,52 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.database.models.ShowModelDb
+import mezic.grega.hows_gregamezic.ShowRepository
 import mezic.grega.hows_gregamezic.network.Shows
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.ui.shows.dummy.ShowsAdapter
+import mezic.grega.hows_gregamezic.viewmodels.ShowViewModel
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.lang.RuntimeException
 
 class ShowFragment : Fragment() {
 
-
+    /**
+     * My vars
+     */
     companion object {
-
         fun newIntent(): ShowFragment {
             return ShowFragment()
         }
-
+        private lateinit var adapter: ShowsAdapter
         lateinit var showCallback: ShowCallback
+        lateinit var viewModel: ShowViewModel
     }
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        // get view model
+        viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
+
+        // init interface
         if (context is ShowCallback) {
             showCallback = context
         } else {
@@ -65,30 +81,22 @@ class ShowFragment : Fragment() {
             }?.show()
         }
 
-
         progressbar.visibility = View.VISIBLE
-        SingletonApi.service.getShows().enqueue(object : Callback<Shows> {
-            override fun onFailure(call: Call<Shows>, t: Throwable) {
-                progressbar.visibility = View.GONE
-                t.message?.let { toast(it) }
-                error(t)
-            }
+        adapter = ShowsAdapter { showCallback.onShowItemClick(it._id) }
+        showsRecycleView.layoutManager = LinearLayoutManager(context)
+        showsRecycleView.adapter = adapter
 
-            override fun onResponse(call: Call<Shows>, response: Response<Shows>) {
-                progressbar.visibility = View.GONE
-                if (response.isSuccessful) {
-                    val items = response.body()?.data
-                    if (items != null) {
-                        showsRecycleView.layoutManager = LinearLayoutManager(context)
-                        showsRecycleView.adapter = ShowsAdapter(items) {
-                            showCallback.onShowItemClick(it._id)
-                        }
-                    }
-                } else {
-                    toast("Error! Something went wrong, please try again")
-                }
+        // get the data
+        viewModel.showsList.observe(this, Observer {
+            progressbar.visibility = View.GONE
+            if (it != null) {
+                adapter.setData(it)
             }
+        })
 
+        // check for errors
+        viewModel.error.observe(this, Observer {
+            toast(it.errorMessage)
         })
     }
 

@@ -17,6 +17,7 @@ import mezic.grega.hows_gregamezic.database.repository.ShowsDao
         EpisodeModelDb::class
     ]
 )
+
 abstract class ShowDatabase: RoomDatabase() {
 
     abstract fun showsDao(): ShowsDao

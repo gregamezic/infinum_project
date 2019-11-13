@@ -19,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
@@ -30,9 +32,11 @@ import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
 import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
+import mezic.grega.hows_gregamezic.viewmodels.AddEpisodeViewModel
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.selector
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.yesButton
@@ -55,6 +59,7 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
         }
 
         lateinit var addEpisodeCallback: AddEpisodeCallback
+        lateinit var viewModel: AddEpisodeViewModel
     }
 
     // my val's
@@ -68,6 +73,9 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        viewModel = ViewModelProviders.of(this).get(AddEpisodeViewModel::class.java)
+
         if (context is AddEpisodeCallback) {
             addEpisodeCallback = context
         } else {
@@ -139,17 +147,16 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
             val description = input_episode_desciption.text.toString()
 
 
-            val newEpisode = AddEpisode(showId, mCurrentPhotoPath, name, description, episodeText, seasonText)
+            val episode = AddEpisode(showId, mCurrentPhotoPath, name, description, episodeText, seasonText)
             val token = ShowApp.mSharedPreferencesManager.getUserToken()
 
 
-            // CREATE API CALL!
             //check if user has token
             if (token == SharedPreferencesManager.DEFAULT_TOKEN) {
                 toast("Please login with your email or register!")
                 addEpisodeCallback.noToken()
             }
-            else createApiCall(newEpisode)
+            else createApiCall(episode)
         }
 
         // image view take picture
@@ -159,20 +166,19 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
     }
 
     private fun createApiCall(episode: AddEpisode) {
-        SingletonApi.service.addEpisode(ShowApp.mSharedPreferencesManager.getUserToken(), episode).enqueue(object: Callback<AddEpisodeResult> {
-            override fun onFailure(call: Call<AddEpisodeResult>, t: Throwable) {
-                progressbar.visibility = View.GONE
-                t.message?.let { toast(it) }
-                error(t)
-            }
+        viewModel.addEpisode(episode)
 
-            override fun onResponse(call: Call<AddEpisodeResult>, response: Response<AddEpisodeResult>) {
-                progressbar.visibility = View.GONE
-                if (response.isSuccessful) {
-                    addEpisodeCallback.onEpisodeSave(showId)
-                    toast("Episode successfully added!")
-                } else
-                    toast("Error! Something went wrong, please try again")
+        // check if it is successful
+        viewModel.success.observe(this, androidx.lifecycle.Observer {
+            progressbar.visibility = View.GONE
+            if (it) {
+                toast("Episode added successfully")
+                addEpisodeCallback.onEpisodeSave(showId)
+            } else {
+                viewModel.error.observe(this, androidx.lifecycle.Observer {networkError ->
+                    toast(networkError.errorMessage)
+                    //requireActivity().onBackPressed()
+                })
             }
         })
     }

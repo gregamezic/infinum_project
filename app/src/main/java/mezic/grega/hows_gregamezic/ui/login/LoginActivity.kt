@@ -29,14 +29,14 @@ class LoginActivity : MainBaseActivity() {
         setContentView(R.layout.activity_login)
 
         // check if user is already logged in
-        if (mSharedPreferencesManager.isUserLogin()) {
+        if (mSharedPreferencesManager.isUserLogin() && mSharedPreferencesManager.getUserToken().isNotBlank()) {
             startActivity(Intent(this, MainFragmentActivity::class.java))
             finish()
         }
 
         btn_login.isEnabled = false
 
-        // On button login click action
+        // On button login click clickAction
         btn_login.setOnClickListener {
             //check if login input is correct
             if (isLoginValid()) {

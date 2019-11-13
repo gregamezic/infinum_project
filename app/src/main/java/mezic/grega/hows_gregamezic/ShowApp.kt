@@ -14,6 +14,7 @@ class ShowApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         setupSharedPreferences()
     }
 
