@@ -35,5 +35,6 @@
     <string name="create_an_account">Create an account</string>
     <string name="network_error">Unknown error! Please try again!</string>
     <string name="no_internet">No internet connection!</string>
+    <string name="shows_title_splash">shows</string>
 
 </resources>

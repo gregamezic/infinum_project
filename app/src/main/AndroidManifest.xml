@@ -30,6 +30,9 @@
         <activity
             android:name="mezic.grega.hows_gregamezic.ui.login.LoginActivity"
             android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <activity android:name=".ui.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
