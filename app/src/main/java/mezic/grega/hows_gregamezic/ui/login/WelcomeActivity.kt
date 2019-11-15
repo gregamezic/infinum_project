@@ -17,7 +17,6 @@ class WelcomeActivity : MainBaseActivity() {
 
     private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
-            //val intent = Intent(applicationContext, ShowActivity::class.java)
             val intent = Intent(applicationContext, MainFragmentActivity::class.java)
             startActivity(intent)
             finish()

@@ -6,8 +6,6 @@ import mezic.grega.hows_gregamezic.database.models.EpisodeModelDb
 import mezic.grega.hows_gregamezic.database.models.ShowDetailModelDb
 import mezic.grega.hows_gregamezic.database.models.ShowModelDb
 import mezic.grega.hows_gregamezic.network.*
-import mezic.grega.hows_gregamezic.network.errorInterfaces.NetworkErrorCallback
-import mezic.grega.hows_gregamezic.network.otherNetworkInterfaces.NetworkAddEpisodeCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,20 +39,12 @@ object ShowRepository {
                 executor.execute {
                     val itemsDb = database.showsDao().getAllShows()
                     var items: List<ShowItem>? = null
-                    if (itemsDb != null)
+                    if (itemsDb.isNotEmpty())
                         items = itemsDb.map { ShowItem(it.id, it.title, it.imageUrl, it.likesCount) }
-                    else
-
-                        errorCallback(NetworkError("No data in the database"))
-
+                    else {
+                        errorCallback(NetworkError("Error: no data in the database"))
+                    }
                     callback(items)
-                }
-
-                // check for error
-                if (t is UnknownHostException) { // No internet exception, shows data from db
-                    errorCallback(NetworkError("No internet connection"))
-                } else {
-                    errorCallback(NetworkError("Unknown error. Please try again"))
                 }
             }
 
@@ -71,16 +61,27 @@ object ShowRepository {
 
                         //insert items to database
                         insertShowList(databaseItems)
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
                     }
                 } else {
                     // read database
                     var items: List<ShowItem>? = null
                     executor.execute {
                         val itemsDb = database.showsDao().getAllShows()
-                        if (itemsDb != null)
-                            items = itemsDb.map { ShowItem(it.id, it.title, it.imageUrl, it.likesCount) }
-                        else
-                            errorCallback(NetworkError("No data in the database"))
+                        if (itemsDb.isNotEmpty()) {
+                            items = itemsDb.map {
+                                ShowItem(
+                                    it.id,
+                                    it.title,
+                                    it.imageUrl,
+                                    it.likesCount
+                                )
+                            }
+                        }
+                        else {
+                            errorCallback(NetworkError("Error: no data in the database"))
+                        }
                         callback(items)
                     }
                 }
@@ -105,28 +106,18 @@ object ShowRepository {
 
             override fun onFailure(call: Call<Show>, t: Throwable) {
                 // read data from database
-                var showDetail: ShowDetail? = null
+                var showDetail: ShowDetail?
                 executor.execute {
                     val showDetailDb = database.showDetailDao().getShowDetail(showId)
-                    if (showDetailDb != null) {
-                        showDetail = ShowDetail(
-                            showDetailDb.type,
-                            showDetailDb.title,
-                            showDetailDb.description,
-                            showDetailDb.id,
-                            showDetailDb.imageUrl,
-                            showDetailDb.likesCount
-                        )
-                    } else
-                        errorCallback(NetworkError("No data in the database"))
-
+                    showDetail = ShowDetail(
+                        showDetailDb.type,
+                        showDetailDb.title,
+                        showDetailDb.description,
+                        showDetailDb.id,
+                        showDetailDb.imageUrl,
+                        showDetailDb.likesCount
+                    )
                     callback(showDetail)
-                }
-
-                if (t is UnknownHostException) { // Internet exception
-                    errorCallback(NetworkError("No internet connection"))
-                } else {
-                    errorCallback(NetworkError("Unknown error. Please try again"))
                 }
             }
 
@@ -147,22 +138,21 @@ object ShowRepository {
                                 )
                             )
                         }
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
                     }
                 } else {
-                    var showDetail: ShowDetail? = null
+                    var showDetail: ShowDetail?
                     executor.execute {
                         val showDetailDb = database.showDetailDao().getShowDetail(showId)
-                        if (showDetailDb != null) {
-                            showDetail = ShowDetail(
-                                showDetailDb.type,
-                                showDetailDb.title,
-                                showDetailDb.description,
-                                showDetailDb.id,
-                                showDetailDb.imageUrl,
-                                showDetailDb.likesCount
-                            )
-                        } else
-                            errorCallback(NetworkError("No data in the database"))
+                        showDetail = ShowDetail(
+                            showDetailDb.type,
+                            showDetailDb.title,
+                            showDetailDb.description,
+                            showDetailDb.id,
+                            showDetailDb.imageUrl,
+                            showDetailDb.likesCount
+                        )
 
                         callback(showDetail)
                     }
@@ -189,7 +179,7 @@ object ShowRepository {
                 executor.execute {
                     val episodesDb = database.episodeDao().getAllShowsEpisodes(showId)
                     var episodes: List<EpisodeItem>? = null
-                    if (episodesDb != null) {
+                    if (episodesDb.isNotEmpty()) {
                         episodes = episodesDb.map {
                             EpisodeItem(
                                 it.show_id,
@@ -200,15 +190,11 @@ object ShowRepository {
                                 it.season
                             )
                         }
-                    } else
-                        errorCallback(NetworkError("No data in the database"))
+                    } else {
+                        errorCallback(NetworkError("Error: no data in the database"))
+                    }
 
                     callback(episodes)
-                }
-                if (t is UnknownHostException) { // Internet exception
-                    errorCallback(NetworkError("No internet connection"))
-                } else {
-                    errorCallback(NetworkError("Unknown error. Please try again"))
                 }
             }
 
@@ -229,15 +215,15 @@ object ShowRepository {
                                 it.season
                             )
                         })
-
-                    } else
-                        errorCallback(NetworkError("No data in the database"))
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
+                    }
                     callback(episodes)
                 } else {
                     executor.execute {
                         val episodesDb = database.episodeDao().getAllShowsEpisodes(showId)
                         var episodes: List<EpisodeItem>? = null
-                        if (episodesDb != null) {
+                        if (episodesDb.isNotEmpty()) {
                             episodes = episodesDb.map {
                                 EpisodeItem(
                                     it.show_id,
@@ -248,8 +234,9 @@ object ShowRepository {
                                     it.season
                                 )
                             }
-                        } else
-                            errorCallback(NetworkError("No data in the database"))
+                        } else {
+                            errorCallback(NetworkError("Error: no data in the database"))
+                        }
 
                         callback(episodes)
                     }

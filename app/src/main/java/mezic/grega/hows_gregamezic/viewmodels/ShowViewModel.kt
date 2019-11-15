@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import mezic.grega.hows_gregamezic.ShowRepository
 import mezic.grega.hows_gregamezic.network.NetworkError
 import mezic.grega.hows_gregamezic.network.ShowItem
-import mezic.grega.hows_gregamezic.network.errorInterfaces.NetworkErrorCallback
 
 class ShowViewModel : ViewModel() {
     init {

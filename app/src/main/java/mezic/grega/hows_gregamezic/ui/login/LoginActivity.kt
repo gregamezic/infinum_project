@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import mezic.grega.hows_gregamezic.MainBaseActivity
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
+import mezic.grega.hows_gregamezic.network.NetworkError
 import mezic.grega.hows_gregamezic.network.UserRegister
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.network.UserLoginResult
@@ -19,10 +20,9 @@ import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.UnknownHostException
 
 class LoginActivity : MainBaseActivity() {
-
-    private val TAG: String = LoginActivity::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,12 @@ class LoginActivity : MainBaseActivity() {
         SingletonApi.service.loginUser(UserRegister(email, password))
             .enqueue(object: Callback<UserLoginResult>{
                 override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
-                    toast("Error! Please try to login again!")
+
+                    if (t is UnknownHostException) {
+                        toast("No Internet connection. Please try again!")
+                    } else {
+                        toast("Unknown error. Please try again!")
+                    }
                     progressbar.visibility = View.GONE
                 }
 
@@ -89,8 +94,9 @@ class LoginActivity : MainBaseActivity() {
                         // start the activity
                         startActivity(intent)
                         finish()
-                    } else
+                    } else {
                         toast("Error! Please try to login again!")
+                    }
                 }
 
             })
