@@ -20,7 +20,8 @@
 
         <activity android:name="mezic.grega.hows_gregamezic.ui.login.WelcomeActivity" />
 
-        <activity android:name="mezic.grega.hows_gregamezic.ui.login.RegisterActivity" />
+        <activity android:name="mezic.grega.hows_gregamezic.ui.login.RegisterActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".MainBaseActivity" />
         <activity android:name=".MainFragmentActivity"

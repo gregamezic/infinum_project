@@ -14,14 +14,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/episodes_sleeping_text"
-        android:textColor="@color/text_gray"
+        android:textColor="@color/text_light"
         android:textSize="@dimen/default_font"
         android:layout_marginTop="@dimen/add_episodes_font" />
     <TextView
         android:id="@+id/tv_add_episodes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/pink_episodes"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/add_episodes_font"
         android:text="@string/add_episodes" />
 

@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-7dp"
-        android:backgroundTint="@color/pale_pink_disabled"
+        android:backgroundTint="@color/disabled_pink"
         android:indeterminateOnly="true"
-        android:indeterminateTint="@color/pale_pink_pressed"
+        android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
@@ -34,7 +34,9 @@
             android:id="@+id/input_email_registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_username"
+            android:hint="@string/e_mail"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/colorHint"
             android:textSize="@dimen/default_font" />
@@ -52,13 +54,15 @@
         android:layout_marginLeft="@dimen/default_padding"
         android:layout_marginRight="@dimen/default_padding"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/pale_pink_disabled">
+        app:passwordToggleTint="@color/disabled_pink">
 
         <EditText
             android:id="@+id/input_password_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_password"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp"
             android:inputType="textPassword"
             android:textSize="@dimen/default_font" />
 
@@ -74,13 +78,15 @@
         android:layout_marginLeft="@dimen/default_padding"
         android:layout_marginRight="@dimen/default_padding"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/pale_pink_disabled">
+        app:passwordToggleTint="@color/disabled_pink">
 
         <EditText
             android:id="@+id/input_password_register_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_password_again"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp"
             android:inputType="textPassword"
             android:textSize="@dimen/default_font" />
 

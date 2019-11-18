@@ -17,9 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-7dp"
-        android:backgroundTint="@color/pale_pink_disabled"
+        android:backgroundTint="@color/disabled_pink"
         android:indeterminateOnly="true"
-        android:indeterminateTint="@color/pale_pink_pressed"
+        android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/progressbar"
         android:textSize="@dimen/default_font"
         tools:text="This is a short description for a specific show."
-        android:textColor="@color/text_gray"/>
+        android:textColor="@color/text_light"/>
 
     <TextView
         android:id="@+id/tv_episodes_title"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/show_detail_description"
         app:layout_constraintStart_toStartOf="@+id/show_detail_description"
         android:textStyle="bold"
-        android:textColor="@color/text_black"
+        android:textColor="@color/text_regular"
         android:text="@string/episodes" />
 
 
@@ -73,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_add_episode"
-        android:backgroundTint="@color/pink_episodes"
+        android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/add_episodes"
         android:layout_margin="@dimen/double_padding" />
 </androidx.constraintlayout.widget.ConstraintLayout>

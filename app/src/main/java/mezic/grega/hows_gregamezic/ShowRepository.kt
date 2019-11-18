@@ -109,15 +109,18 @@ object ShowRepository {
                 var showDetail: ShowDetail?
                 executor.execute {
                     val showDetailDb = database.showDetailDao().getShowDetail(showId)
-                    showDetail = ShowDetail(
-                        showDetailDb.type,
-                        showDetailDb.title,
-                        showDetailDb.description,
-                        showDetailDb.id,
-                        showDetailDb.imageUrl,
-                        showDetailDb.likesCount
-                    )
-                    callback(showDetail)
+                    if (showDetailDb != null) {
+                        showDetail = ShowDetail(
+                            showDetailDb.type,
+                            showDetailDb.title,
+                            showDetailDb.description,
+                            showDetailDb.id,
+                            showDetailDb.imageUrl,
+                            showDetailDb.likesCount
+                        )
+                        callback(showDetail)
+                    } else
+                        errorCallback(NetworkError("Error: no data in the database"))
                 }
             }
 

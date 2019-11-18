@@ -28,8 +28,9 @@ class WelcomeActivity : MainBaseActivity() {
         setContentView(R.layout.activity_welcome)
 
         //read message
-        val message = intent.getStringExtra(USERNAME_KEY)
-        tv_welcome_name.text = "Welcome $message"
+        val messageEmail = intent.getStringExtra(USERNAME_KEY)
+        val username = if (messageEmail.contains("@")) messageEmail.split("@")[0] else messageEmail
+        tv_welcome_name.text = "Welcome $username"
     }
 
 

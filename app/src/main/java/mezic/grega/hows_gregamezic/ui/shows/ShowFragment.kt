@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.database.models.ShowModelDb
 import mezic.grega.hows_gregamezic.ShowRepository
+import mezic.grega.hows_gregamezic.network.ShowItem
 import mezic.grega.hows_gregamezic.network.Shows
 import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.ui.shows.dummy.ShowsAdapter
@@ -39,6 +42,7 @@ class ShowFragment : Fragment() {
             return ShowFragment()
         }
         private lateinit var adapter: ShowsAdapter
+        private lateinit var shows: List<ShowItem>
         lateinit var showCallback: ShowCallback
         lateinit var viewModel: ShowViewModel
     }
@@ -83,6 +87,7 @@ class ShowFragment : Fragment() {
 
         progressbar.visibility = View.VISIBLE
         adapter = ShowsAdapter { showCallback.onShowItemClick(it._id) }
+        adapter.isLinear = true
         showsRecycleView.layoutManager = LinearLayoutManager(context)
         showsRecycleView.adapter = adapter
 
@@ -90,7 +95,8 @@ class ShowFragment : Fragment() {
         viewModel.showsList.observe(this, Observer {
             progressbar.visibility = View.GONE
             if (it != null) {
-                adapter.setData(it)
+                shows = it
+                adapter.setData(shows)
             }
         })
 
@@ -98,11 +104,35 @@ class ShowFragment : Fragment() {
         viewModel.error.observe(this, Observer {
             toast(it.errorMessage)
         })
+
+
+        fab_toggle_show_view.setOnClickListener {
+            toggleView(adapter.isLinear)
+        }
     }
 
 
     private fun logout() {
         showCallback.onLogout()
+    }
+
+    private fun toggleView(isLinear: Boolean) {
+        if (isLinear) {
+            adapter = ShowsAdapter { showCallback.onShowItemClick(it._id) }
+            adapter.isLinear = false
+            adapter.setData(shows)
+            fab_toggle_show_view.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_listview))
+            showsRecycleView.layoutManager = GridLayoutManager(context, 2)
+            showsRecycleView.adapter = adapter
+
+        } else {
+            adapter = ShowsAdapter { showCallback.onShowItemClick(it._id) }
+            adapter.isLinear = true
+            adapter.setData(shows)
+            fab_toggle_show_view.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_gridview_white))
+            showsRecycleView.layoutManager = LinearLayoutManager(context)
+            showsRecycleView.adapter = adapter
+        }
     }
 }
 

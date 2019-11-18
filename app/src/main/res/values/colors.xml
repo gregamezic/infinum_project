@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFA8C2</color>
+    <color name="colorPrimary">#ff758c</color>
     <color name="colorPrimaryDark">#FF99C2</color>
     <color name="colorAccent">#A0A0A0</color>
+    <color name="disabled_pink">#ffccd5</color>
+    <color name="white">#ffffff</color>
 
-    <color name="pale_pink_pressed">#FF99C2</color>
+    <!--<color name="pale_pink_pressed">#FF99C2</color>
     <color name="pale_pink_active">#FFA8C2</color>
     <color name="pale_pink_disabled">#FFCCD5</color>
     <color name="pink_episodes">#ff758c</color>
     <color name="white">#FFFFFF</color>
     <color name="text_black">#2e2e2e</color>
     <color name="text_gray">#505050</color>
-    <color name="text_light_gray">#A0A0A0</color>
+    <color name="text_light_gray">#A0A0A0</color>-->
+
+
+
+    <color name="text_regular">#2e2e2e</color>
+    <color name="text_light">#505050</color>
+
 
 
     <!-- Hint -->

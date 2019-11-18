@@ -31,7 +31,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class ShowDetailFragment: Fragment() {
+class ShowDetailFragment : Fragment() {
 
     // Instance
     companion object {
@@ -45,6 +45,7 @@ class ShowDetailFragment: Fragment() {
 
         lateinit var showDetailCallback: ShowDetailCallback
         lateinit var viewModel: ShowDetailViewModel
+        private var isNoError = false
     }
 
     private lateinit var showId: String
@@ -85,12 +86,8 @@ class ShowDetailFragment: Fragment() {
 
         // get show details
         viewModel.getShowDetail(showId)
-        viewModel.showDetailItem.observe(this, Observer {showDetail ->
+        viewModel.showDetailItem.observe(this, Observer { showDetail ->
             if (showDetail != null) {
-                ShowRepository.insertShowDetail(
-                    ShowDetailModelDb(
-                        showDetail._id, showDetail.type, showDetail.description, showDetail.title, showDetail.imageUrl, showDetail.likesCount)
-                )
 
                 showName = showDetail.title
                 showDescription = showDetail.description
@@ -100,17 +97,17 @@ class ShowDetailFragment: Fragment() {
 
                 // set toolbar title
                 my_toolbar.title = showName
-                my_toolbar.setNavigationOnClickListener {
-                    (context as MainFragmentActivity).supportFragmentManager.popBackStack()
-                }
+            } else {
+                isNoError = false
             }
         })
 
         // get episode list
         viewModel.getEpisodeList(showId)
-        viewModel.episodeList.observe(this, Observer {episodes ->
+        viewModel.episodeList.observe(this, Observer { episodes ->
             progressbar.visibility = View.GONE
             if (episodes != null) {
+                isNoError = true
                 if (episodes.isNotEmpty()) {
                     linear_view_no_episodes.visibility = View.GONE
                     episodes_recycle_view.visibility = View.VISIBLE
@@ -127,21 +124,35 @@ class ShowDetailFragment: Fragment() {
                     episodes_recycle_view.visibility = View.GONE
                 }
             } else {
-                toast("Unknown error. Please try again!")
+                viewModel.error.observe(this, Observer {
+                    toast(it.errorMessage)
+                    isNoError = false
+                })
             }
         })
+
+        // enable navigation anyway
+        my_toolbar.setNavigationOnClickListener {
+            (context as MainFragmentActivity).supportFragmentManager.popBackStack()
+        }
 
         // add episode listeners
         setAddEpisodeListeners()
     }
 
     private fun setAddEpisodeListeners() {
-        tv_add_episodes.setOnClickListener {
-            showDetailCallback.onAddEpisode(showId, showName, showDescription)
-        }
-        fab_add_episode.setOnClickListener {
-            showDetailCallback.onAddEpisode(showId, showName, showDescription)
-        }
+            tv_add_episodes.setOnClickListener {
+                if (isNoError)
+                    showDetailCallback.onAddEpisode(showId, showName, showDescription)
+                else
+                    toast("Please connect to the internet")
+            }
+            fab_add_episode.setOnClickListener {
+                if (isNoError)
+                    showDetailCallback.onAddEpisode(showId, showName, showDescription)
+                else
+                    toast("Please connect to the internet")
+            }
     }
 }
 

@@ -8,14 +8,11 @@ import kotlinx.android.synthetic.main.view_show_item.view.*
 import mezic.grega.hows_gregamezic.network.ShowItem
 import com.squareup.picasso.Picasso
 
-
 class ShowsAdapter(val clickAction: (ShowItem) -> Unit) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
 
-
     private var dataset = listOf<ShowItem>()
-
-
+    var isLinear = true
 
 
     fun setData(dataset: List<ShowItem>) {
@@ -24,7 +21,13 @@ class ShowsAdapter(val clickAction: (ShowItem) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(mezic.grega.hows_gregamezic.R.layout.view_show_item, parent, false)
+        val view = if (isLinear) {
+            LayoutInflater.from(parent.context)
+                .inflate(mezic.grega.hows_gregamezic.R.layout.view_show_item, parent, false)
+        } else {
+            LayoutInflater.from(parent.context)
+                .inflate(mezic.grega.hows_gregamezic.R.layout.show_item_grid, parent, false)
+        }
         return ShowViewHolder(view)
     }
 
