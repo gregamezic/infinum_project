@@ -39,5 +39,8 @@
     <string name="show_already_liked">You already liked the show</string>
     <string name="show_already_disliked">You already disliked the show</string>
     <string name="comments">Comments</string>
+    <string name="no_comments_text">Sorry, we don\'t have comments yet.\nBe first who will write a review</string>
+    <string name="write_comments">Write a comment</string>
+    <string name="post">Post</string>
 
 </resources>

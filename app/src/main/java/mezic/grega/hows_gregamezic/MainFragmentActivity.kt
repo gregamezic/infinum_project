@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import mezic.grega.hows_gregamezic.ui.comments.CommentsFragment
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeCallback
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeFragment
+import mezic.grega.hows_gregamezic.ui.episodes.EpisodeDetailsCallback
 import mezic.grega.hows_gregamezic.ui.episodes.EpisodesDetailsFragment
 import mezic.grega.hows_gregamezic.ui.login.LoginActivity
 import mezic.grega.hows_gregamezic.ui.shows.*
@@ -14,7 +16,7 @@ import mezic.grega.hows_gregamezic.utils.FragmentBackPressed
 import mezic.grega.hows_gregamezic.viewmodels.ShowViewModel
 
 
-class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback {
+class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallback, AddEpisodeCallback, EpisodeDetailsCallback {
 
     private var showId: String = ""
     private var showName: String? = ""
@@ -87,5 +89,12 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallbac
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onCommentClick(episodeId: String) {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, CommentsFragment.newIntent(episodeId))
+            .addToBackStack(CommentsFragment::class.java.name)
+            .commit()
     }
 }

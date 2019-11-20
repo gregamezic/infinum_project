@@ -19,6 +19,8 @@ import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.utils.Util.Companion.EPISODE_ID_KEY
 import mezic.grega.hows_gregamezic.viewmodels.EpisodeDetailViewModel
 import org.jetbrains.anko.support.v4.toast
+import java.lang.Exception
+import java.lang.RuntimeException
 
 class EpisodesDetailsFragment : Fragment() {
 
@@ -32,10 +34,19 @@ class EpisodesDetailsFragment : Fragment() {
         }
 
         lateinit var viewModel: EpisodeDetailViewModel
+        private lateinit var episodeDetailsCallback: EpisodeDetailsCallback
+        private lateinit var episodeId: String
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        if (context is EpisodeDetailsCallback) {
+            episodeDetailsCallback = context
+        } else {
+            throw RuntimeException("Please implement EpisodeDetailsCallback")
+        }
+
         viewModel = ViewModelProviders.of(this).get(EpisodeDetailViewModel::class.java)
     }
 
@@ -52,7 +63,7 @@ class EpisodesDetailsFragment : Fragment() {
 
         progressbar.visibility = View.VISIBLE
 
-        val episodeId = arguments?.getString(EPISODE_ID_KEY, "").toString()
+        episodeId = arguments?.getString(EPISODE_ID_KEY, "").toString()
 
         // get episode details
         viewModel.getEpisodeDetail(episodeId)
@@ -90,6 +101,10 @@ class EpisodesDetailsFragment : Fragment() {
     }
 
     private fun openComments() {
-        toast("Open comments")
+        episodeDetailsCallback.onCommentClick(episodeId)
     }
+}
+
+interface EpisodeDetailsCallback {
+    fun onCommentClick(episodeId: String)
 }

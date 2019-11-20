@@ -27,6 +27,7 @@ import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.ShowApp
 import mezic.grega.hows_gregamezic.network.*
+import mezic.grega.hows_gregamezic.utils.FragmentBackPressed
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
 import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
@@ -46,7 +47,8 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
+class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback, FragmentBackPressed {
+
     companion object {
         fun newIntent(showId : String) : AddEpisodeFragment {
             val args = Bundle()
@@ -108,14 +110,16 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
         // set toolbar title
         my_toolbar1.title = getString(R.string.add_episode)
-        my_toolbar1.setNavigationOnClickListener {
-            if (isSafeToClose())
-                (context as MainFragmentActivity).supportFragmentManager.popBackStack()
-            else
-                exitDialog(context as MainFragmentActivity)
-        }
+
         // set view on click listeners
         setupViewsListeners()
+    }
+
+    private fun handleBackPressed() {
+        if (isSafeToClose())
+            (context as MainFragmentActivity).supportFragmentManager.popBackStack()
+        else
+            exitDialog(context as MainFragmentActivity)
     }
 
     private fun exitDialog(context: Context) {
@@ -346,6 +350,13 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
         numberPickerDialog.dismiss()
         tv_season_episodes.text ="S %02d E %02d".format(season, episode)
     }
+
+    override fun onBackPressed(): Boolean {
+        handleBackPressed()
+        return true
+    }
+
+
 
     /**
      * Class that is checking for input text changes

@@ -95,8 +95,13 @@ class ShowFragment : Fragment() {
         viewModel.showsList.observe(this, Observer {
             progressbar.visibility = View.GONE
             if (it != null) {
-                shows = it
-                adapter.setData(shows)
+                if ((it.isNotEmpty())) {
+                    shows = it
+                    adapter.setData(shows)
+                } else {
+                    showsRecycleView.visibility = View.GONE
+                    linear_view_no_shows.visibility = View.VISIBLE
+                }
             }
         })
 
