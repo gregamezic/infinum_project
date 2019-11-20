@@ -25,6 +25,12 @@ class Util {
         const val SHOW_EPISODES_KEY = "mezic.grega.shows.SHOW_EPISODES_KEY"
         const val SHOW_POSITION = "mezic.grega.shows.SHOW_POSITION"
 
+        //SHOW DETAIL LIKE
+        const val SHOW_DETAIL_LIKE = 1
+        const val SHOW_DETAIL_DISLIKE = -1
+        const val SHOW_DETAIL_NEUTRAL = 0
+
+
         // ADD EPISODE
         const val EPISODE_ADD_EPISODE_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
         const val EPISODE_IMAGE_PATH_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"

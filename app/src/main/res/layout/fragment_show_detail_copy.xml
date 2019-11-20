@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true">
+
+    <include
+        layout="@layout/view_toolbar" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:backgroundTint="@color/disabled_pink"
+        android:indeterminateOnly="true"
+        android:indeterminateTint="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
+    <TextView
+        android:id="@+id/show_detail_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar"
+        android:textSize="@dimen/default_font"
+        tools:text="This is a short description for a specific show."
+        android:textColor="@color/text_light"/>
+
+    <TextView
+        android:id="@+id/tv_episodes_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding"
+        android:textSize="@dimen/shows_title_size_item"
+        app:layout_constraintTop_toBottomOf="@+id/show_detail_description"
+        app:layout_constraintStart_toStartOf="@+id/show_detail_description"
+        android:textStyle="bold"
+        android:textColor="@color/text_regular"
+        android:text="@string/episodes" />
+
+
+    <include
+        android:id="@+id/linear_view_no_episodes"
+        layout="@layout/view_no_episodes"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_episodes_title"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <include
+        android:id="@+id/episodes_recycle_view"
+        layout="@layout/view_show_episodes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_episodes_title"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_add_episode"
+        android:backgroundTint="@color/colorPrimary"
+        android:contentDescription="@string/add_episodes"
+        android:layout_margin="@dimen/double_padding" />
+</androidx.constraintlayout.widget.ConstraintLayout>

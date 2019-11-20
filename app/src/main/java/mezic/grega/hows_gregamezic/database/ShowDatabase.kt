@@ -10,7 +10,7 @@ import mezic.grega.hows_gregamezic.database.repository.ShowDetailDao
 import mezic.grega.hows_gregamezic.database.repository.ShowsDao
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         ShowModelDb::class,
         ShowDetailModelDb::class,

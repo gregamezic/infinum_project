@@ -108,8 +108,8 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
         nullableShowId?.let { showId = nullableShowId }
 
         // set toolbar title
-        my_toolbar.title = getString(R.string.add_episode)
-        my_toolbar.setNavigationOnClickListener {
+        my_toolbar1.title = getString(R.string.add_episode)
+        my_toolbar1.setNavigationOnClickListener {
             if (isSafeToClose())
                 (context as MainFragmentActivity).supportFragmentManager.popBackStack()
             else

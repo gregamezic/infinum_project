@@ -5,6 +5,7 @@
     <color name="colorAccent">#A0A0A0</color>
     <color name="disabled_pink">#ffccd5</color>
     <color name="white">#ffffff</color>
+    <color name="white_transparent">#55ffffff</color>
 
     <!--<color name="pale_pink_pressed">#FF99C2</color>
     <color name="pale_pink_active">#FFA8C2</color>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/likes_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|bottom"
+    android:gravity="center"
+    android:background="@drawable/transparent_gradient_top_bottom"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/default_padding"
+    android:paddingTop="@dimen/default_padding">
+
+
+        <ImageView
+            android:id="@+id/img_dislike_episode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dislike_outline" />
+
+        <TextView
+            android:id="@+id/tv_likes_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:text="500"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#de000000" />
+
+        <ImageView
+            android:id="@+id/img_like_episode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:src="@drawable/ic_like_outline" />
+
+</LinearLayout>

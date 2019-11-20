@@ -36,5 +36,7 @@
     <string name="network_error">Unknown error! Please try again!</string>
     <string name="no_internet">No internet connection!</string>
     <string name="shows_title_splash">shows</string>
+    <string name="show_already_liked">You already liked the show</string>
+    <string name="show_already_disliked">You already disliked the show</string>
 
 </resources>

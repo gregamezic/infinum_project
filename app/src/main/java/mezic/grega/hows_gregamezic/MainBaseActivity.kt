@@ -19,8 +19,8 @@ open class MainBaseActivity : AppCompatActivity() {
     }
 
     protected fun setupToolbar(name: String) {
-        my_toolbar.title = name
-        my_toolbar.setNavigationOnClickListener {
+        my_toolbar1.title = name
+        my_toolbar1.setNavigationOnClickListener {
             onBackPressed()
         }
     }

@@ -65,6 +65,10 @@ class ShowDetail(
     val likesCount: Int
 )
 
+class ShowLikeDislikeResult(
+    val message: String
+)
+
 
 /**
  * Episodes

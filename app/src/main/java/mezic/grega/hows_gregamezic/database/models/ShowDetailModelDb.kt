@@ -24,6 +24,9 @@ data class ShowDetailModelDb(
     val imageUrl: String,
 
     @ColumnInfo(name = "likesCount")
-    val likesCount: Int
+    val likesCount: Int,
+
+    @ColumnInfo(name = "like")
+    val like: Int = 0
 
 ): Serializable

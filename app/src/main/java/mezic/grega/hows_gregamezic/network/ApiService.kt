@@ -33,4 +33,17 @@ interface ApiService {
         @Header("Authorization") authorization: String,
         @Body addEpisode: AddEpisode
     ): Call<AddEpisodeResult>
+
+    @POST("/api/shows/{showId}/like")
+    fun likeShow(
+        @Path("showId") showId: String,
+        @Header("Authorization") authorization: String
+    ): Call<ShowLikeDislikeResult>
+
+    @POST("/api/shows/{showId}/dislike")
+    fun dislikeShow(
+        @Path("showId") showId: String,
+        @Header("Authorization") authorization: String
+    ): Call<ShowLikeDislikeResult>
+
 }

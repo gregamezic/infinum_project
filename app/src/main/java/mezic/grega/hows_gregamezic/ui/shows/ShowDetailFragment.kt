@@ -1,16 +1,21 @@
 package mezic.grega.hows_gregamezic.ui.shows
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show_detail.*
+import kotlinx.android.synthetic.main.like_view.*
 import kotlinx.android.synthetic.main.view_no_episodes.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
@@ -46,6 +51,8 @@ class ShowDetailFragment : Fragment() {
         lateinit var showDetailCallback: ShowDetailCallback
         lateinit var viewModel: ShowDetailViewModel
         private var isNoError = false
+        private var canLike = false
+        private var canDislike = false
     }
 
     private lateinit var showId: String
@@ -89,6 +96,8 @@ class ShowDetailFragment : Fragment() {
         viewModel.showDetailItem.observe(this, Observer { showDetail ->
             if (showDetail != null) {
 
+                collapsing_like_view.visibility = View.VISIBLE
+
                 showName = showDetail.title
                 showDescription = showDetail.description
 
@@ -96,11 +105,48 @@ class ShowDetailFragment : Fragment() {
                 show_detail_description.text = showDescription
 
                 // set toolbar title
-                my_toolbar.title = showName
+                collapsing_toolbar.apply {
+                    title = showName
+                    setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), R.color.text_regular))
+                    setExpandedTitleTextAppearance(R.style.collapsingToolbar)
+                    Picasso.get().load("https://api.infinum.academy${showDetail.imageUrl}").into(img_collapsing_toolbar)
+                }
+
+                // number of likes
+                tv_likes_count.text = showDetail.likesCount.toString()
             } else {
+                collapsing_like_view.visibility = View.INVISIBLE
                 isNoError = false
             }
         })
+
+        //get likes
+        viewModel.getShowLike(showId)
+        viewModel.showLikeItem.observe(this, Observer {like ->
+            when(like){
+                Util.SHOW_DETAIL_LIKE -> {
+                    img_like_episode.setImageResource(R.drawable.ic_like_pressed)
+                    img_dislike_episode.setImageResource(R.drawable.ic_dislike_outline)
+                    canLike = false
+                    canDislike = true
+                }
+
+                Util.SHOW_DETAIL_DISLIKE -> {
+                    img_like_episode.setImageResource(R.drawable.ic_like_outline)
+                    img_dislike_episode.setImageResource(R.drawable.ic_dislike_pressed)
+                    canLike = true
+                    canDislike = false
+                }
+
+                Util.SHOW_DETAIL_NEUTRAL -> {
+                    img_like_episode.setImageResource(R.drawable.ic_like_outline)
+                    img_dislike_episode.setImageResource(R.drawable.ic_dislike_outline)
+                    canLike = true
+                    canDislike = true
+                }
+            }
+        })
+
 
         // get episode list
         viewModel.getEpisodeList(showId)
@@ -138,6 +184,60 @@ class ShowDetailFragment : Fragment() {
 
         // add episode listeners
         setAddEpisodeListeners()
+
+        initLikeButtons()
+    }
+
+    /**
+     * like / dislike buttons
+     */
+    private fun initLikeButtons() {
+
+        // LIKE
+        img_like_episode.setOnClickListener {
+            if (canLike) {
+                viewModel.likeShow(showId)
+                viewModel.callSuccessfull.observe(this@ShowDetailFragment, Observer {
+                    if (it) {
+                        canLike = false
+                        canDislike = true
+                        img_like_episode.setImageResource(R.drawable.ic_like_pressed)
+                        img_dislike_episode.setImageResource(R.drawable.ic_dislike_outline)
+                        var likes = Integer.parseInt(tv_likes_count.text.toString())
+                        tv_likes_count.text = (++likes).toString()
+                    } else {
+                        viewModel.error.observe(this@ShowDetailFragment, Observer {error ->
+                            toast(error.errorMessage)
+                        })
+                    }
+                })
+            } else {
+                toast(getString(R.string.show_already_liked))
+            }
+        }
+
+        // DISLIKE
+        img_dislike_episode.setOnClickListener {
+            if (canDislike) {
+                viewModel.dislikeShow(showId)
+                viewModel.callSuccessfull.observe(this@ShowDetailFragment, Observer {
+                    if (it) {
+                        canLike = true
+                        canDislike = false
+                        img_like_episode.setImageResource(R.drawable.ic_like_outline)
+                        img_dislike_episode.setImageResource(R.drawable.ic_dislike_pressed)
+                        var likes = Integer.parseInt(tv_likes_count.text.toString())
+                        tv_likes_count.text = (--likes).toString()
+                    } else {
+                        viewModel.error.observe(this@ShowDetailFragment, Observer {error ->
+                            toast(error.errorMessage)
+                        })
+                    }
+                })
+            } else {
+                toast(getString(R.string.show_already_disliked))
+            }
+        }
     }
 
     private fun setAddEpisodeListeners() {
