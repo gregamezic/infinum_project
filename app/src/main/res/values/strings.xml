@@ -38,5 +38,6 @@
     <string name="shows_title_splash">shows</string>
     <string name="show_already_liked">You already liked the show</string>
     <string name="show_already_disliked">You already disliked the show</string>
+    <string name="comments">Comments</string>
 
 </resources>

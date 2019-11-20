@@ -12,7 +12,7 @@ class ShowsAdapter(val clickAction: (ShowItem) -> Unit) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
 
     private var dataset = listOf<ShowItem>()
-    var isLinear = true
+    var isLinear = false
 
 
     fun setData(dataset: List<ShowItem>) {
@@ -47,6 +47,7 @@ class ShowsAdapter(val clickAction: (ShowItem) -> Unit) :
             with(itemView) {
                 Picasso.get().load("https://api.infinum.academy${item.imageUrl}").into(image_show_item)
                 tv_shows_title_item.text = item.title
+                tv_shows_like_count_item?.text = item.likesCount.toString()
                 setOnClickListener {clickAction(item)}
             }
         }

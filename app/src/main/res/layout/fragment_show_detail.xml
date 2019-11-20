@@ -99,7 +99,7 @@
                 android:padding="@dimen/default_padding"
                 android:textColor="@color/text_light"
                 android:textSize="@dimen/default_font"
-                app:layout_constraintTop_toBottomOf="@+id/collapsing_like_view"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="This is a short description for a specific show." />
 
             <TextView

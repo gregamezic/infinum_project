@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ff758c</color>
-    <color name="colorPrimaryDark">#FF99C2</color>
+    <!--<color name="colorPrimaryDark">#FF99C2</color>-->
     <color name="colorAccent">#A0A0A0</color>
     <color name="disabled_pink">#ffccd5</color>
     <color name="white">#ffffff</color>

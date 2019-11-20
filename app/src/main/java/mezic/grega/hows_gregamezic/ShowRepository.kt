@@ -7,9 +7,12 @@ import mezic.grega.hows_gregamezic.database.models.ShowDetailModelDb
 import mezic.grega.hows_gregamezic.database.models.ShowModelDb
 import mezic.grega.hows_gregamezic.network.*
 import mezic.grega.hows_gregamezic.utils.Util
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.net.UnknownHostException
 import java.util.concurrent.Executors
 
@@ -332,6 +335,38 @@ object ShowRepository {
         }
     }
 
+
+    /**
+     * EPISODE DETAIL
+     */
+
+    // todo: database
+    fun getEpisodeDetail(episodeId: String, callback: (EpisodeDetailData?) -> Unit, errorCallback: (NetworkError) -> Unit) {
+
+        SingletonApi.service.getEpisodeDetail(episodeId).enqueue(object : Callback<EpisodeDetail> {
+            override fun onFailure(call: Call<EpisodeDetail>, t: Throwable) {
+                callback(null)
+
+                if (t is UnknownHostException) {
+                    errorCallback(NetworkError("No internet connection. Please try again!"))
+                } else {
+                    errorCallback(NetworkError("Unknown error. Please try again!"))
+                }
+            }
+
+            override fun onResponse(call: Call<EpisodeDetail>, response: Response<EpisodeDetail>) {
+                if (response.isSuccessful) {
+                    val episodeDetail = response.body()?.data
+                    callback(episodeDetail)
+                } else {
+                    errorCallback(NetworkError("Unknown error. Please try again!"))
+                }
+            }
+
+
+        })
+    }
+
     fun addEpisode(
         episode: AddEpisode,
         errorCallback: (NetworkError) -> Unit,
@@ -356,6 +391,30 @@ object ShowRepository {
                         episodeAddedCallback(true)
                     } else {
                         episodeAddedCallback(false)
+                        errorCallback(NetworkError("Unknown error. Please try again"))
+                    }
+                }
+            })
+    }
+
+
+    fun uploadImage(
+        file: File,
+        errorCallback: (NetworkError) -> Unit,
+        callback: (MediaData?) -> Unit) {
+
+        SingletonApi.service.uploadMedia(file.asRequestBody("image/jpg".toMediaTypeOrNull()), ShowApp.mSharedPreferencesManager.getUserToken())
+            .enqueue(object: Callback<Media> {
+                override fun onFailure(call: Call<Media>, t: Throwable) {
+                    callback(null)
+                    errorCallback(NetworkError("Unknown error. Please try again"))
+                }
+
+                override fun onResponse(call: Call<Media>, response: Response<Media>) {
+                    if (response.isSuccessful) {
+                        callback(response.body()?.data)
+                    } else {
+                        callback(null)
                         errorCallback(NetworkError("Unknown error. Please try again"))
                     }
                 }

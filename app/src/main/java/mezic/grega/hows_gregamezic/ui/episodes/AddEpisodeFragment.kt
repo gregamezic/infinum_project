@@ -26,9 +26,7 @@ import kotlinx.android.synthetic.main.view_toolbar.*
 import mezic.grega.hows_gregamezic.MainFragmentActivity
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.ShowApp
-import mezic.grega.hows_gregamezic.network.AddEpisode
-import mezic.grega.hows_gregamezic.network.AddEpisodeResult
-import mezic.grega.hows_gregamezic.network.SingletonApi
+import mezic.grega.hows_gregamezic.network.*
 import mezic.grega.hows_gregamezic.utils.PermissionHelper
 import mezic.grega.hows_gregamezic.utils.SharedPreferencesManager
 import mezic.grega.hows_gregamezic.utils.Util
@@ -64,7 +62,8 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
 
     // my val's
     private val TAG : String = AddEpisodeFragment::class.java.name
-    private var  mCurrentPhotoPath: String = ""
+    private var  mCurrentPhotoPath = ""
+    private lateinit var file: File
     private var seasonText: String = "S 01"
     private var episodeText: String = "E 01"
     private var showId: String = ""
@@ -166,19 +165,48 @@ class AddEpisodeFragment: Fragment(), SeasonEpisodeDialogCallback {
     }
 
     private fun createApiCall(episode: AddEpisode) {
-        viewModel.addEpisode(episode)
+        // add image
+        var error = false
+        file = File(mCurrentPhotoPath)
 
+        if (file.exists()) {
+            viewModel.uploadMedia(file)
+            viewModel.success_media.observe(this, androidx.lifecycle.Observer {
+                if (it != null) {
+                    episode.mediaId = it._id
+                } else {
+                    error = true
+                    viewModel.error_media.observe(
+                        this,
+                        androidx.lifecycle.Observer { networkError ->
+                            toast(networkError.errorMessage)
+                        })
+                }
+
+                if (!error) { // if there was no problem with adding the picture, continue
+                    addEpisode(episode)
+                }
+            })
+        } else {
+            addEpisode(episode)
+        }
+    }
+
+    private fun addEpisode(episode: AddEpisode) {
+        // add episode
+        viewModel.addEpisode(episode)
         // check if it is successful
-        viewModel.success.observe(this, androidx.lifecycle.Observer {
+        viewModel.success.observe(this, androidx.lifecycle.Observer { success ->
             progressbar.visibility = View.GONE
-            if (it) {
+            if (success) {
                 toast("Episode added successfully")
                 addEpisodeCallback.onEpisodeSave(showId)
             } else {
-                viewModel.error.observe(this, androidx.lifecycle.Observer {networkError ->
-                    toast(networkError.errorMessage)
-                    //requireActivity().onBackPressed()
-                })
+                viewModel.error.observe(
+                    this,
+                    androidx.lifecycle.Observer { networkError ->
+                        toast(networkError.errorMessage)
+                    })
             }
         })
     }

@@ -2,17 +2,23 @@ package mezic.grega.hows_gregamezic.network
 
 import retrofit2.Call
 import retrofit2.http.*
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+
+
 
 interface ApiService {
 
     @POST("/api/users")
     fun registerUser(
-        @Body userRegister: UserRegister): Call<UserRegisterResult>
+        @Body userRegister: UserRegister
+    ): Call<UserRegisterResult>
 
     @POST("/api/users/sessions")
     fun loginUser(
-        @Body userLogin: UserRegister): Call<UserLoginResult>
-
+        @Body userLogin: UserRegister
+    ): Call<UserLoginResult>
 
     @GET("/api/shows")
     fun getShows(): Call<Shows>
@@ -21,7 +27,6 @@ interface ApiService {
     fun getShow(
         @Path("showId") showId: String
     ): Call<Show>
-
 
     @GET("/api/shows/{showId}/episodes")
     fun getEpisodes(
@@ -45,5 +50,23 @@ interface ApiService {
         @Path("showId") showId: String,
         @Header("Authorization") authorization: String
     ): Call<ShowLikeDislikeResult>
+
+    @GET("/api/episodes/{episodeId}")
+    fun getEpisodeDetail(
+        @Path("episodeId") episodeId: String
+    ): Call<EpisodeDetail>
+
+    /*@POST("/api/media")
+    @Multipart
+    fun uploadMedia(
+        @Part("file\"; filename=\"image.jpg\"") request: RequestBody
+    ): Call<ApiResponse<MediaResponse>>*/
+
+    @POST("/api/media")
+    @Multipart
+    fun uploadMedia(
+        @Part("file\"; filename=\"image.jpg\"") request: RequestBody,
+        @Header("Authorization") authorization: String
+    ): Call<Media>
 
 }

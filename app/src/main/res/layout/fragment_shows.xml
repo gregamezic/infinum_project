@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_gridview_white"
+        android:src="@drawable/ic_listview"
         android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/add_episodes"
         android:layout_margin="@dimen/double_padding" />

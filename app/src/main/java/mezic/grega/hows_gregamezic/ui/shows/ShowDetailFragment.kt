@@ -163,7 +163,7 @@ class ShowDetailFragment : Fragment() {
                         LinearLayoutManager(context)
                     (episodes_recycle_view as RecyclerView).adapter =
                         EpisodeAdapter(episodes) {
-                            toast(it.title)
+                            showDetailCallback.onEpisodeClick(it._id)
                         }
                 } else {
                     linear_view_no_episodes.visibility = View.VISIBLE
@@ -258,4 +258,5 @@ class ShowDetailFragment : Fragment() {
 
 interface ShowDetailCallback {
     fun onAddEpisode(showId: String, showName: String?, showDescription: String?)
+    fun onEpisodeClick(episodeId: String)
 }

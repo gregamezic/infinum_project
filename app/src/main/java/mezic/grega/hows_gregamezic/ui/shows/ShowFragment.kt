@@ -87,8 +87,8 @@ class ShowFragment : Fragment() {
 
         progressbar.visibility = View.VISIBLE
         adapter = ShowsAdapter { showCallback.onShowItemClick(it._id) }
-        adapter.isLinear = true
-        showsRecycleView.layoutManager = LinearLayoutManager(context)
+        adapter.isLinear = false
+        showsRecycleView.layoutManager = GridLayoutManager(context, 2)
         showsRecycleView.adapter = adapter
 
         // get the data

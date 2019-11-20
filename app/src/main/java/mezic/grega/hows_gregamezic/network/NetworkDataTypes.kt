@@ -86,10 +86,26 @@ class EpisodeItem(
     val season: String
 )
 
+// episode detail
+class EpisodeDetail(
+    val data: EpisodeDetailData
+)
+
+class EpisodeDetailData(
+    val episodeNumber: String,
+    val showId: String,
+    val description: String,
+    val season: String,
+    val title: String,
+    val type: String,
+    val _id: String,
+    val imageUrl: String
+)
+
 @JsonClass(generateAdapter = false)
 class AddEpisode(
     @Json(name = "showId") val showId: String,
-    @Json(name = "mediaId") val mediaId: String,
+    @Json(name = "mediaId") var mediaId: String?,
     @Json(name = "title") val title: String,
     @Json(name = "description") val description: String,
     @Json(name = "episodeNumber") val episodeNumber: String,
@@ -98,4 +114,15 @@ class AddEpisode(
 
 class AddEpisodeResult(
     val message: String
+)
+
+
+class Media(
+    val data: MediaData
+)
+
+class MediaData(
+    val path: String,
+    val type: String,
+    val _id: String
 )

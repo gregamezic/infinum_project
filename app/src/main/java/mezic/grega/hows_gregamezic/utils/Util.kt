@@ -30,12 +30,16 @@ class Util {
         const val SHOW_DETAIL_DISLIKE = -1
         const val SHOW_DETAIL_NEUTRAL = 0
 
+        // EPISODE DETAIL
+        const val EPISODE_ID_KEY = "mezic.grega.shows.EPISODE_ID_KEY"
 
         // ADD EPISODE
         const val EPISODE_ADD_EPISODE_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
         const val EPISODE_IMAGE_PATH_KEY = "mezic.grega.shows.EPISODE_ADD_EPISODE_KEY"
         const val EPISODE_NAME = "mezic.grega.shows.EPISODE_NAME"
         const val EPISODE_DESCRIPTION = "mezic.grega.shows.EPISODE_DESCRIPTION"
+        const val EPISODE_SEASON_KEY = "mezic.grega.shows.EPISODE_SEASON_KEY"
+        const val EPISODE_EPISODE_KEY = "mezic.grega.shows.EPISODE_EPISODE_KEY"
 
 
         // NUMBER PICKER DIALOG

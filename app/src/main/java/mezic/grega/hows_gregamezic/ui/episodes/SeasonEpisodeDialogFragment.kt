@@ -8,6 +8,8 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.fragment_season_episode_dialog.*
 import mezic.grega.hows_gregamezic.R
 import mezic.grega.hows_gregamezic.utils.Util
+import mezic.grega.hows_gregamezic.utils.Util.Companion.EPISODE_EPISODE_KEY
+import mezic.grega.hows_gregamezic.utils.Util.Companion.EPISODE_SEASON_KEY
 
 class SeasonEpisodeDialogFragment: DialogFragment() {
 
@@ -35,6 +37,7 @@ class SeasonEpisodeDialogFragment: DialogFragment() {
 
         numberPicker_episode.minValue = Util.MIN_EPISODE_VALUE
         numberPicker_episode.maxValue = Util.MAX_EPISODE_VALUE
+
 
         tv_save.setOnClickListener {
             val season = numberPicker_season.value

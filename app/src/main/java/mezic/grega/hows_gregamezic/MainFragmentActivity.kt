@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeCallback
 import mezic.grega.hows_gregamezic.ui.episodes.AddEpisodeFragment
+import mezic.grega.hows_gregamezic.ui.episodes.EpisodesDetailsFragment
 import mezic.grega.hows_gregamezic.ui.login.LoginActivity
 import mezic.grega.hows_gregamezic.ui.shows.*
 import mezic.grega.hows_gregamezic.utils.FragmentBackPressed
@@ -62,6 +63,13 @@ class MainFragmentActivity : MainBaseActivity(), ShowCallback, ShowDetailCallbac
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, ShowDetailFragment.newIntent(showId))
             .addToBackStack(ShowDetailFragment::class.java.name)
+            .commit()
+    }
+
+    override fun onEpisodeClick(episodeId: String) {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, EpisodesDetailsFragment.newIntent(episodeId))
+            .addToBackStack(EpisodesDetailsFragment::class.java.name)
             .commit()
     }
 
