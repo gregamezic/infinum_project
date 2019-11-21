@@ -183,67 +183,79 @@ object ShowRepository {
         }
     }
 
-    fun postLikeShow(showId: String,
-                     callback: (Boolean) -> Unit,
-                     errorCallback: (NetworkError) -> Unit) {
-        SingletonApi.service.likeShow(showId, ShowApp.mSharedPreferencesManager.getUserToken()).enqueue(object: Callback<ShowLikeDislikeResult>{
+    fun postLikeShow(
+        showId: String,
+        callback: (Boolean) -> Unit,
+        errorCallback: (NetworkError) -> Unit
+    ) {
+        SingletonApi.service.likeShow(showId, ShowApp.mSharedPreferencesManager.getUserToken())
+            .enqueue(object : Callback<ShowLikeDislikeResult> {
 
 
-            override fun onFailure(call: Call<ShowLikeDislikeResult>, t: Throwable) {
-                callback(false)
-
-                if (t is UnknownHostException){
-                    errorCallback(NetworkError("No internet connection. Please try again!"))
-                } else {
-                    errorCallback(NetworkError("Unknown error. Please try again!"))
-                }
-            }
-
-            override fun onResponse(call: Call<ShowLikeDislikeResult>, response: Response<ShowLikeDislikeResult>) {
-                if (response.isSuccessful){
-                    callback(true)
-                    executor.execute {
-                        database.showDetailDao().updateLikes(showId, Util.SHOW_DETAIL_LIKE)
-                    }
-                } else {
+                override fun onFailure(call: Call<ShowLikeDislikeResult>, t: Throwable) {
                     callback(false)
-                    errorCallback(NetworkError("Unknown error. Please try again!"))
-                }
-            }
 
-        })
+                    if (t is UnknownHostException) {
+                        errorCallback(NetworkError("No internet connection. Please try again!"))
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<ShowLikeDislikeResult>,
+                    response: Response<ShowLikeDislikeResult>
+                ) {
+                    if (response.isSuccessful) {
+                        callback(true)
+                        executor.execute {
+                            database.showDetailDao().updateLikes(showId, Util.SHOW_DETAIL_LIKE)
+                        }
+                    } else {
+                        callback(false)
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
+                    }
+                }
+
+            })
     }
 
 
-    fun postDislikeShow(showId: String,
-                     callback: (Boolean) -> Unit,
-                     errorCallback: (NetworkError) -> Unit) {
-        SingletonApi.service.dislikeShow(showId, ShowApp.mSharedPreferencesManager.getUserToken()).enqueue(object: Callback<ShowLikeDislikeResult>{
+    fun postDislikeShow(
+        showId: String,
+        callback: (Boolean) -> Unit,
+        errorCallback: (NetworkError) -> Unit
+    ) {
+        SingletonApi.service.dislikeShow(showId, ShowApp.mSharedPreferencesManager.getUserToken())
+            .enqueue(object : Callback<ShowLikeDislikeResult> {
 
 
-            override fun onFailure(call: Call<ShowLikeDislikeResult>, t: Throwable) {
-                callback(false)
-
-                if (t is UnknownHostException){
-                    errorCallback(NetworkError("No internet connection. Please try again!"))
-                } else {
-                    errorCallback(NetworkError("Unknown error. Please try again!"))
-                }
-            }
-
-            override fun onResponse(call: Call<ShowLikeDislikeResult>, response: Response<ShowLikeDislikeResult>) {
-                if (response.isSuccessful){
-                    callback(true)
-                    executor.execute {
-                        database.showDetailDao().updateLikes(showId, Util.SHOW_DETAIL_DISLIKE)
-                    }
-                } else {
+                override fun onFailure(call: Call<ShowLikeDislikeResult>, t: Throwable) {
                     callback(false)
-                    errorCallback(NetworkError("Unknown error. Please try again!"))
-                }
-            }
 
-        })
+                    if (t is UnknownHostException) {
+                        errorCallback(NetworkError("No internet connection. Please try again!"))
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<ShowLikeDislikeResult>,
+                    response: Response<ShowLikeDislikeResult>
+                ) {
+                    if (response.isSuccessful) {
+                        callback(true)
+                        executor.execute {
+                            database.showDetailDao().updateLikes(showId, Util.SHOW_DETAIL_DISLIKE)
+                        }
+                    } else {
+                        callback(false)
+                        errorCallback(NetworkError("Unknown error. Please try again!"))
+                    }
+                }
+
+            })
     }
 
 
@@ -310,22 +322,22 @@ object ShowRepository {
         })
     }
 
-    fun getAllEpisodesDB(showId: String) : List<EpisodeItem>? {
-            val episodesDb = database.episodeDao().getAllShowsEpisodes(showId)
-            var episodes: List<EpisodeItem>? = null
-            if (episodesDb.isNotEmpty()) {
-                episodes = episodesDb.map {
-                    EpisodeItem(
-                        it.show_id,
-                        it.title,
-                        it.description,
-                        it.imageUrl,
-                        it.episodeNumber,
-                        it.season
-                    )
-                }
+    fun getAllEpisodesDB(showId: String): List<EpisodeItem>? {
+        val episodesDb = database.episodeDao().getAllShowsEpisodes(showId)
+        var episodes: List<EpisodeItem>? = null
+        if (episodesDb.isNotEmpty()) {
+            episodes = episodesDb.map {
+                EpisodeItem(
+                    it.show_id,
+                    it.title,
+                    it.description,
+                    it.imageUrl,
+                    it.episodeNumber,
+                    it.season
+                )
             }
-            return episodes
+        }
+        return episodes
     }
 
     // insert all episodes
@@ -341,7 +353,11 @@ object ShowRepository {
      */
 
     // todo: database
-    fun getEpisodeDetail(episodeId: String, callback: (EpisodeDetailData?) -> Unit, errorCallback: (NetworkError) -> Unit) {
+    fun getEpisodeDetail(
+        episodeId: String,
+        callback: (EpisodeDetailData?) -> Unit,
+        errorCallback: (NetworkError) -> Unit
+    ) {
 
         SingletonApi.service.getEpisodeDetail(episodeId).enqueue(object : Callback<EpisodeDetail> {
             override fun onFailure(call: Call<EpisodeDetail>, t: Throwable) {
@@ -362,8 +378,6 @@ object ShowRepository {
                     errorCallback(NetworkError("Unknown error. Please try again!"))
                 }
             }
-
-
         })
     }
 
@@ -397,14 +411,89 @@ object ShowRepository {
             })
     }
 
+    /**
+     * GET COMMENTS
+     */
+
+    fun getComments(
+        episodeId: String,
+        callback: (List<Comment>?) -> Unit,
+        errorCallback: (NetworkError) -> Unit
+    ) {
+
+        SingletonApi.service.getComments(episodeId).enqueue(object : Callback<CommentResult> {
+            override fun onFailure(call: Call<CommentResult>, t: Throwable) {
+                callback(null)
+
+                if (t is UnknownHostException) {
+                    errorCallback(NetworkError("No internet connection. Please try again"))
+                } else {
+                    errorCallback(NetworkError("Unknown error. Please try again"))
+                }
+            }
+
+            override fun onResponse(call: Call<CommentResult>, response: Response<CommentResult>) {
+                if (response.isSuccessful) {
+                    val comments = response.body()?.data
+
+                    // return comments
+                    callback(comments)
+                } else {
+                    callback(null)
+                    errorCallback(NetworkError("Unknown error. Please try again"))
+                }
+            }
+        })
+    }
+
+    /**
+     * POST COMMENT
+     */
+    fun postComment(comment: CommentPost,
+                    callback: (CommentPostResultData?) -> Unit,
+                    errorCallback: (NetworkError) -> Unit) {
+        SingletonApi.service.postComment(
+            ShowApp.mSharedPreferencesManager.getUserToken(), comment).enqueue(
+            object : Callback<CommentPostResult> {
+
+                override fun onFailure(call: Call<CommentPostResult>, t: Throwable) {
+                    callback(null)
+
+                    if (t is UnknownHostException) {
+                        errorCallback(NetworkError("No internet connection. Please try again"))
+                    } else {
+                        errorCallback(NetworkError("Unknown error. Please try again"))
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<CommentPostResult>,
+                    response: Response<CommentPostResult>
+                ) {
+                    if (response.isSuccessful) {
+                        val comment = response.body()?.data
+
+                        // return comments
+                        callback(comment)
+                    } else {
+                        callback(null)
+                        errorCallback(NetworkError("Unknown error. Please try again"))
+                    }
+                }
+            })
+    }
 
     fun uploadImage(
         file: File,
         errorCallback: (NetworkError) -> Unit,
-        callback: (MediaData?) -> Unit) {
+        callback: (MediaData?) -> Unit
+    ) {
 
-        SingletonApi.service.uploadMedia(file.asRequestBody("image/jpg".toMediaTypeOrNull()), ShowApp.mSharedPreferencesManager.getUserToken())
-            .enqueue(object: Callback<Media> {
+        SingletonApi.service.uploadMedia(
+            file.asRequestBody("image/jpg".toMediaTypeOrNull()),
+            ShowApp.mSharedPreferencesManager.getUserToken()
+        )
+            .enqueue(object : Callback<Media> {
                 override fun onFailure(call: Call<Media>, t: Throwable) {
                     callback(null)
                     errorCallback(NetworkError("Unknown error. Please try again"))

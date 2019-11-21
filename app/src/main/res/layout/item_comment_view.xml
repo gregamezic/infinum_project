@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/default_padding">
+
+    <ImageView
+        android:id="@+id/img_comment_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_img_comment_user"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_comment_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/default_font"
+        tools:text="Andrei"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/img_comment_user"
+        app:layout_constraintLeft_toRightOf="@+id/img_comment_user"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_comment_text_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:textColor="#3b4354"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_comment_username"
+        app:layout_constraintStart_toStartOf="@+id/tv_comment_username"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment_username"
+        tools:text="Well, this episode really sucks. Such a time wasting" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,6 @@ import okhttp3.RequestBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 
-
-
 interface ApiService {
 
     @POST("/api/users")
@@ -56,12 +54,6 @@ interface ApiService {
         @Path("episodeId") episodeId: String
     ): Call<EpisodeDetail>
 
-    /*@POST("/api/media")
-    @Multipart
-    fun uploadMedia(
-        @Part("file\"; filename=\"image.jpg\"") request: RequestBody
-    ): Call<ApiResponse<MediaResponse>>*/
-
     @POST("/api/media")
     @Multipart
     fun uploadMedia(
@@ -69,4 +61,14 @@ interface ApiService {
         @Header("Authorization") authorization: String
     ): Call<Media>
 
+    @GET("/api/episodes/{episodeId}/comments")
+    fun getComments(
+        @Path("episodeId") episodeId: String
+    ): Call<CommentResult>
+
+    @POST("/api/comments")
+    fun postComment(
+        @Header("Authorization") authorization: String,
+        @Body comment: CommentPost
+    ): Call<CommentPostResult>
 }

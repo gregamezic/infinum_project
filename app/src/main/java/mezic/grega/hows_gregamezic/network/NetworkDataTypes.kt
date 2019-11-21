@@ -116,7 +116,45 @@ class AddEpisodeResult(
     val message: String
 )
 
+/**
+ * Comments GET
+ */
+class CommentResult(
+    val data: List<Comment>
+)
 
+class Comment(
+    val episodeId: String,
+    val text: String,
+    val userEmail: String,
+    val _id: String
+)
+
+/**
+ * Comments POST
+ */
+@JsonClass(generateAdapter = false)
+class CommentPost(
+    @Json(name = "text") val text: String,
+    @Json(name = "episodeId") val episodeId: String
+)
+
+class CommentPostResult(
+    val data: CommentPostResultData
+)
+
+class CommentPostResultData(
+    val text: String,
+    val episodeId: String,
+    val userId: String,
+    var userEmail: String,
+    val type: String,
+    val _id: String
+)
+
+/**
+ * MEDIA
+ */
 class Media(
     val data: MediaData
 )
