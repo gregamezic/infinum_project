@@ -352,7 +352,6 @@ object ShowRepository {
      * EPISODE DETAIL
      */
 
-    // todo: database
     fun getEpisodeDetail(
         episodeId: String,
         callback: (EpisodeDetailData?) -> Unit,
