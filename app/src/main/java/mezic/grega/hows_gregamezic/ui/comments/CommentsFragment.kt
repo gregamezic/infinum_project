@@ -61,6 +61,10 @@ class CommentsFragment: Fragment() {
             (context as MainFragmentActivity).supportFragmentManager.popBackStack()
         }
 
+        comments_swipe_refresh.setOnRefreshListener {
+            updateComments(episodeId)
+        }
+
         adapter = CommentsAdapter()
         comments_recycle_view.layoutManager = LinearLayoutManager(context)
         comments_recycle_view.adapter = adapter
@@ -81,7 +85,6 @@ class CommentsFragment: Fragment() {
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.hideSoftInputFromWindow(requireActivity().currentFocus.windowToken, 0)
 
-
         viewModel.postComment(episodeId, textComment)
         viewModel.postSuccess.observe(this, Observer {
             if (it) {
@@ -98,12 +101,12 @@ class CommentsFragment: Fragment() {
     private fun updateComments(episodeId: String){
 
         // start progress bar
-        progressbar.visibility = View.VISIBLE
+        comments_swipe_refresh.isRefreshing = true
 
         // get comments
         viewModel.getComments(episodeId)
         viewModel.comments.observe(this, Observer {
-            progressbar.visibility = View.GONE
+            comments_swipe_refresh.isRefreshing = false
             if (it != null) {
                 if (it.isNotEmpty()) {
                     et_comment.setText("")

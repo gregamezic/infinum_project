@@ -471,10 +471,10 @@ object ShowRepository {
                     response: Response<CommentPostResult>
                 ) {
                     if (response.isSuccessful) {
-                        val comment = response.body()?.data
+                        val commentResponse = response.body()?.data
 
                         // return comments
-                        callback(comment)
+                        callback(commentResponse)
                     } else {
                         callback(null)
                         errorCallback(NetworkError("Unknown error. Please try again"))

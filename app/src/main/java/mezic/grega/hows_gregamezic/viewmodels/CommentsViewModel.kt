@@ -25,7 +25,7 @@ class CommentsViewModel : ViewModel() {
     }
 
     fun postComment(episodeId: String, text: String) {
-        ShowRepository.postComment(CommentPost(episodeId, text), {
+        ShowRepository.postComment(CommentPost(text, episodeId), {
             postSuccess.postValue(it != null)
         }, {networkError ->
             error.postValue(networkError)
