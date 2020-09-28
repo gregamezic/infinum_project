@@ -27,7 +27,8 @@ class AddEpisodeViewModel: ViewModel() {
     }
 
     fun uploadMedia(file: File) {
-        ShowRepository.uploadImage(file, {networkError ->
+        ShowRepository.uploadImage(file,
+            {networkError ->
             error_media.postValue(networkError)
         }, {
             success_media.postValue(it)

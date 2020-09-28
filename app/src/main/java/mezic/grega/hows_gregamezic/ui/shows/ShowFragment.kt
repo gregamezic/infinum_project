@@ -13,23 +13,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_shows.*
 import mezic.grega.hows_gregamezic.R
-import mezic.grega.hows_gregamezic.database.models.ShowModelDb
-import mezic.grega.hows_gregamezic.ShowRepository
 import mezic.grega.hows_gregamezic.network.ShowItem
-import mezic.grega.hows_gregamezic.network.Shows
-import mezic.grega.hows_gregamezic.network.SingletonApi
 import mezic.grega.hows_gregamezic.ui.shows.dummy.ShowsAdapter
 import mezic.grega.hows_gregamezic.viewmodels.ShowViewModel
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
 import java.lang.RuntimeException
 
 class ShowFragment : Fragment() {
@@ -59,7 +50,7 @@ class ShowFragment : Fragment() {
         if (context is ShowCallback) {
             showCallback = context
         } else {
-            throw RuntimeException("Please implement ShowCallback")
+            throw RuntimeException("Please implement ShowCallback") as Throwable
         }
     }
 

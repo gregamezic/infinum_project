@@ -12,7 +12,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object SingletonApi {
 
-
     private val okhttp = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY

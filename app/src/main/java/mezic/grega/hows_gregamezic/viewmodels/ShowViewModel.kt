@@ -7,8 +7,8 @@ import mezic.grega.hows_gregamezic.network.NetworkError
 import mezic.grega.hows_gregamezic.network.ShowItem
 
 class ShowViewModel : ViewModel() {
-    init {
 
+    init {
         ShowRepository.getAllShows({items ->
             showsList.postValue(items)
         }, {networkError ->

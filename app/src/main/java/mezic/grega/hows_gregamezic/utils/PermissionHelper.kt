@@ -18,7 +18,6 @@ class PermissionHelper(private val context: Context) {
                 PackageManager.PERMISSION_GRANTED)
     }
 
-
     /**
      * READ EXTERNAL STORAGE PERMISSION
      */
